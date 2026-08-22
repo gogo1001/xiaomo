@@ -204,11 +204,13 @@ body.dk .iw{background:#2C2C2C;border-color:#444}
 .mi3{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
 .mi4{width:52px;height:52px;background:var(--lbg);border-radius:10px;display:flex;align-items:center;justify-content:center;border:.5px solid var(--bd);color:var(--t1)}
 .mi5{font-size:12px;color:var(--t2)}
-.ep{display:none;background:var(--ibg);border-top:.5px solid var(--bd);padding:12px;flex-shrink:0;max-height:200px;overflow-y:auto}
-.ep.on{display:block}
+.ep{display:none;background:var(--ibg);border-top:.5px solid var(--bd);padding:12px;flex-shrink:0;max-height:220px;overflow-y:auto;z-index:30}
+.ep.on{display:flex;flex-direction:column}
 .eg{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
-.ei2{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;border-radius:6px}
+.ei2{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;border-radius:6px;transition:background .15s}
+.ei2:active{background:rgba(0,0,0,.08)}
 .ei2 img{width:36px;height:36px;object-fit:contain}
+.ei2,.bb.eb span,.eb{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","Twemoji Mozilla","EmojiOne Color",sans-serif}
 .ea{border:1px dashed #CCC;color:#999;font-size:20px}
 .sb{padding:8px 14px;background:var(--bg);border-bottom:.5px solid var(--bd)}
 .sbx{background:var(--lbg);border-radius:6px;padding:6px 12px;display:flex;align-items:center;gap:8px;color:var(--t2);font-size:14px}
@@ -276,6 +278,7 @@ body.dk .iw{background:#2C2C2C;border-color:#444}
 .cmi{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;font-size:13px;border-bottom:.5px solid var(--bd)}
 .cmi:last-child{border-bottom:none}
 .cdl{color:#FF6B6B;cursor:pointer;font-size:12px;flex-shrink:0}
+.cel{color:var(--green);cursor:pointer;font-size:12px;flex-shrink:0;margin-left:4px}
 .cct{text-align:center;font-size:11px;color:var(--t2);margin-top:8px}
 .dbtn{width:calc(100% - 36px);margin:10px 18px;padding:12px;border:1px solid #FF6B6B;background:transparent;color:#FF6B6B;border-radius:8px;cursor:pointer;font-size:14px;font-family:inherit}
 .iebtn{width:calc(50% - 22px);margin:10px 4px;padding:10px;border:1px solid var(--green);background:transparent;color:var(--green);border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit}
@@ -524,9 +527,10 @@ body.dk .iw{background:#2C2C2C;border-color:#444}
 <div class="mi3" id="btnVoiceCall"><div class="mi4"><svg class="ic icl" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div class="mi5">语音通话</div></div>
 <div class="mi3" id="btnVideoCall"><div class="mi4"><svg class="ic icl" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div><div class="mi5">视频通话</div></div>
 </div>
-<div id="quoteBar" style="display:none;align-items:center;gap:8px;padding:8px 12px;background:var(--lbg);border-bottom:.5px solid var(--bd);flex-shrink:0;">
+<div id="quoteBar" style="display:none;align-items:center;gap:8px;padding:10px 14px;background:var(--lbg);border-bottom:.5px solid var(--bd);flex-shrink:0;cursor:pointer;">
+<div style="width:3px;height:24px;background:var(--green);border-radius:2px;flex-shrink:0;"></div>
 <span style="font-size:13px;color:var(--t1);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.75;" id="msgQuotePreview"></span>
-<span id="msgQuoteCancel" style="display:none;cursor:pointer;color:var(--t2);font-size:18px;padding:2px 8px;">×</span>
+<span id="msgQuoteCancel" style="cursor:pointer;color:var(--t2);font-size:20px;padding:2px 8px;line-height:1;">×</span>
 </div>
 <div class="ibar">
 <button class="tbtn" id="voiceBtn"><svg class="ic" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
@@ -694,7 +698,7 @@ body.dk .iw{background:#2C2C2C;border-color:#444}
 <div class="sg"><div class="sgt">抽卡设置</div><div class="si"><span>回复条数范围</span><span class="sv"><span id="countMinValue">1</span>-<span id="countMaxValue">2</span> 条</span></div><div class="sw-double"><div class="sw-row"><span class="sw-label">最少</span><input type="range" id="countMinSlider" min="1" max="8" value="1" step="1"></div><div class="sw-row"><span class="sw-label">最多</span><input type="range" id="countMaxSlider" min="1" max="8" value="2" step="1"></div></div><div class="sw-hint">每次随机在此范围内抽取回复条数</div><div class="si" style="margin-top:10px;"><span>回复间隔范围</span><span class="sv"><span id="intervalMinValue">1</span>-<span id="intervalMaxValue">3</span> 秒</span></div><div class="sw-double"><div class="sw-row"><span class="sw-label">最快</span><input type="range" id="intervalMinSlider" min="1" max="600" value="1" step="1"></div><div class="sw-row"><span class="sw-label">最慢</span><input type="range" id="intervalMaxSlider" min="1" max="600" value="3" step="1"></div></div><div class="sw-hint">每条消息间隔随机在此范围（最长10分钟）</div></div>
 <div class="sg" id="groupSettings" style="display:none;"><div class="sgt">群聊回复设置</div><div class="si"><span>群聊回复条数</span><span class="sv"><span id="groupCountMinValue">1</span>-<span id="groupCountMaxValue">3</span> 条</span></div><div class="sw-double"><div class="sw-row"><span class="sw-label">最少</span><input type="range" id="groupCountMinSlider" min="1" max="8" value="1" step="1"></div><div class="sw-row"><span class="sw-label">最多</span><input type="range" id="groupCountMaxSlider" min="1" max="8" value="3" step="1"></div></div><div class="sw-hint">群聊中随机联系人发送，条数在此范围随机</div></div>
 <div class="sg"><div class="sgt">对方主动发消息</div><div class="si"><span>开启主动消息</span><span class="sv"><label style="cursor:pointer;"><input type="checkbox" id="autoReplySwitch"> 开启</label></span></div><div class="sw-hint">开启后对方会按设定间隔自动发消息给你</div><div class="si" style="margin-top:10px;"><span>消息间隔范围</span><span class="sv"><span id="autoReplyMinValue">5</span>-<span id="autoReplyMaxValue">30</span> 秒</span></div><div class="sw-double"><div class="sw-row"><span class="sw-label">最快</span><input type="range" id="autoReplyMinSlider" min="3" max="300" value="5" step="1"></div><div class="sw-row"><span class="sw-label">最慢</span><input type="range" id="autoReplyMaxSlider" min="3" max="300" value="30" step="1"></div></div><div class="sw-hint">每次随机在此间隔范围内主动发消息（3秒~5分钟）</div></div>
-<div class="sg"><div class="sgt">字卡管理 (当前联系人)</div><div class="atr"><input type="text" id="cardInput" placeholder="输入字卡内容..." maxlength="50"><button id="addCardBtn">添加</button></div><div style="padding:0 18px;margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;"><button class="iebtn" id="exportCardsBtn">导出字卡</button><button class="iebtn" id="importCardsBtn">导入字卡</button><button class="iebtn" id="batchImportBtn">批量导入</button><button class="iebtn" id="batchDeleteBtn">批量删除</button></div><div class="cml" id="cardList" style="margin-top:10px;"></div><div class="cct" id="cardCount">共 100 张字卡</div><div class="cct" style="margin-top:2px;"><span class="dedupe-link" id="dedupeBtn">去重当前字卡</span></div><div class="bat-bar" id="batchBar"><label><input type="checkbox" id="selectAllCards"> 全选</label><span class="bat-count" id="batchSelCount">已选 0 张</span><span style="flex:1;"></span><button class="bat-del" id="batchDeleteConfirm">删除选中</button><button class="bat-done" id="batchDeleteDone">完成</button></div></div>
+<div class="sg"><div class="sgt">字卡管理 (当前联系人)</div><div class="atr"><input type="text" id="cardInput" placeholder="输入字卡内容..." maxlength="50"><button id="addCardBtn">添加</button></div><div style="padding:0 18px;margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;"><button class="iebtn" id="exportCardsBtn">导出字卡</button><button class="iebtn" id="importCardsBtn">导入字卡</button><button class="iebtn" id="batchImportBtn">批量导入</button><button class="iebtn" id="batchDeleteBtn">批量删除</button></div><div style="padding:0 18px;margin-top:8px;"><input type="text" id="cardSearchInput" placeholder="搜索字卡..." style="width:100%;padding:8px 12px;border:.5px solid var(--bd);border-radius:6px;background:var(--lbg);color:var(--t1);font-size:13px;font-family:inherit;outline:none;"></div><div class="cml" id="cardList" style="margin-top:10px;"></div><div class="cct" id="cardCount">共 100 张字卡</div><div class="cct" style="margin-top:2px;"><span class="dedupe-link" id="dedupeBtn">去重当前字卡</span></div><div class="bat-bar" id="batchBar"><label><input type="checkbox" id="selectAllCards"> 全选</label><span class="bat-count" id="batchSelCount">已选 0 张</span><span style="flex:1;"></span><button class="bat-del" id="batchDeleteConfirm">删除选中</button><button class="bat-done" id="batchDeleteDone">完成</button></div></div>
 <div class="sg"><div class="sgt">聊天背景</div><div class="si" id="setWallpaper"><span>设置当前聊天背景</span><span class="sv">点击选择</span></div><div class="si" id="resetWallpaper"><span>恢复默认背景</span><span class="sv"></span></div></div>
 <button class="dbtn" id="clearChatBtn">清空聊天记录</button>
 </div>
@@ -890,37 +894,40 @@ function renderContacts(){$("contactsList").innerHTML="";S.cs.filter(c=>!c.isGro
 function renderChatHeader(){const c=cur();if(!c)return;$("chatTitle").textContent=c.name;$("chatStatus").textContent=c.status;}
 function renderSettings(){const c=cur();if(!c)return;$("otherNameInput").value=c.name;$("otherAvatarValue").textContent=c.avatar?"已设置":"点击更换";$("randomStatusSwitch").checked=c.randomStatus;renderStatusList(c);$("countMinSlider").value=S.rcMin;$("countMaxSlider").value=S.rcMax;$("countMinValue").textContent=S.rcMin;$("countMaxValue").textContent=S.rcMax;$("intervalMinSlider").value=Math.round(S.riMin/1000);$("intervalMaxSlider").value=Math.round(S.riMax/1000);$("intervalMinValue").textContent=Math.round(S.riMin/1000);$("intervalMaxValue").textContent=Math.round(S.riMax/1000);$("groupCountMinSlider").value=S.grcMin;$("groupCountMaxSlider").value=S.grcMax;$("groupCountMinValue").textContent=S.grcMin;$("groupCountMaxValue").textContent=S.grcMax;$("groupSettings").style.display=c.isGroup?"block":"none";$("autoReplySwitch").checked=S.autoReply;$("autoReplyMinSlider").value=S.autoReplyMin;$("autoReplyMaxSlider").value=S.autoReplyMax;$("autoReplyMinValue").textContent=S.autoReplyMin;$("autoReplyMaxValue").textContent=S.autoReplyMax;renderCardList(c);if(S.wp)$("chatArea").style.backgroundImage=`url(${S.wp})`;else $("chatArea").style.backgroundImage="";}
 function renderStatusList(c){$("statusList").innerHTML="";c.statusList.forEach((s,i)=>{const t=document.createElement("span");t.className="tg"+(s===c.status?" on":"");t.innerHTML=`${s} <span class="tdl" data-i="${i}">×</span>`;t.onclick=e=>{if(e.target.classList.contains("tdl")){c.statusList.splice(i,1);if(c.status===s&&c.statusList.length>0)c.status=c.statusList[0];saveS();renderAll();}else{c.status=s;c.randomStatus=false;$("randomStatusSwitch").checked=false;stopStatusRandom();saveS();renderAll();}};$("statusList").appendChild(t);});}
-let batchDeleteMode=false;let selectedCards=new Set();let batchContactId=null;
+let batchDeleteMode=false;let selectedCards=new Set();let batchContactId=null;let cardSearchQuery="";
 function renderCardList(c){
   if(!c)return;
   if(batchDeleteMode&&batchContactId!==c.id){selectedCards.clear();batchContactId=c.id;$("selectAllCards").checked=false;}
   $("cardList").innerHTML="";
   const limit=batchDeleteMode?500:50;
-  c.cards.slice(0,limit).forEach((t,i)=>{
+  let cardsToShow=c.cards.map((t,i)=>({text:t,idx:i}));
+  if(cardSearchQuery){cardsToShow=cardsToShow.filter(item=>item.text.toLowerCase().includes(cardSearchQuery.toLowerCase()));}
+  cardsToShow=cardsToShow.slice(0,limit);
+  if(cardsToShow.length===0){const e=document.createElement("div");e.style.cssText="text-align:center;padding:20px;color:var(--t2);font-size:13px;";e.textContent=cardSearchQuery?"未找到匹配的字卡":"暂无字卡";$("cardList").appendChild(e);}
+  else{cardsToShow.forEach(item=>{
     const d=document.createElement("div");
-    d.className="cmi"+(batchDeleteMode&&selectedCards.has(i)?" sel":"");
+    d.className="cmi"+(batchDeleteMode&&selectedCards.has(item.idx)?" sel":"");
     if(batchDeleteMode){
-      d.innerHTML=`<input type="checkbox" class="cmi-check"${selectedCards.has(i)?" checked":""}><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${t}</span>`;
+      d.innerHTML=`<input type="checkbox" class="cmi-check"${selectedCards.has(item.idx)?" checked":""}><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${item.text}</span>`;
       d.onclick=e=>{
         if(e.target.tagName==="INPUT"){
-          if(e.target.checked)selectedCards.add(i);else selectedCards.delete(i);
+          if(e.target.checked)selectedCards.add(item.idx);else selectedCards.delete(item.idx);
         }else{
           const cb=d.querySelector("input");
           cb.checked=!cb.checked;
-          if(cb.checked)selectedCards.add(i);else selectedCards.delete(i);
+          if(cb.checked)selectedCards.add(item.idx);else selectedCards.delete(item.idx);
         }
-        d.classList.toggle("sel",selectedCards.has(i));
+        d.classList.toggle("sel",selectedCards.has(item.idx));
         updateBatchCount(c);
       };
     }else{
-      d.innerHTML=`<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${t}</span><span class="cdl" data-i="${i}">删除</span>`;
+      d.innerHTML=`<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${item.text}</span><span class="cel" data-i="${item.idx}">编辑</span><span class="cdl" data-i="${item.idx}">删除</span>`;
     }
     $("cardList").appendChild(d);
-  });
+  });}
   $("cardCount").textContent=`共 ${c.cards.length} 张字卡`;
   if(batchDeleteMode){
     $("batchBar").classList.add("on");
-    $("cardList").querySelectorAll(".cdl").forEach(b=>b.style.display="none");
     updateBatchCount(c);
   }else{
     $("batchBar").classList.remove("on");
@@ -930,6 +937,19 @@ function renderCardList(c){
       c.cards.splice(i,1);
       saveS();
       renderCardList(c);
+      toast("已删除");
+    });
+    $("cardList").querySelectorAll(".cel").forEach(b=>b.onclick=e=>{
+      e.stopPropagation();
+      const i=parseInt(e.target.dataset.i);
+      const newText=prompt("编辑字卡内容：",c.cards[i]);
+      if(newText===null)return;
+      const trimmed=newText.trim();
+      if(!trimmed){toast("内容不能为空");return;}
+      c.cards[i]=trimmed;
+      saveS();
+      renderCardList(c);
+      toast("已修改");
     });
   }
 }
@@ -1040,6 +1060,7 @@ safe("autoReplySwitch",el=>el.onchange=e=>{S.autoReply=e.target.checked;if(S.aut
 safe("autoReplyMinSlider",el=>el.oninput=e=>{let v=parseInt(e.target.value);if(v>S.autoReplyMax){v=S.autoReplyMax;e.target.value=v;}S.autoReplyMin=v;$("autoReplyMinValue").textContent=v;saveS();if(S.autoReply){stopAutoReply();startAutoReply();}});
 safe("autoReplyMaxSlider",el=>el.oninput=e=>{let v=parseInt(e.target.value);if(v<S.autoReplyMin){v=S.autoReplyMin;e.target.value=v;}S.autoReplyMax=v;$("autoReplyMaxValue").textContent=v;saveS();if(S.autoReply){stopAutoReply();startAutoReply();}});
 $("addCardBtn").onclick=()=>{const c=cur();const t=$("cardInput").value.trim();if(!t||!c)return;c.cards.unshift(t);$("cardInput").value="";renderCardList(c);saveS();toast("已添加");};
+safe("cardSearchInput",el=>el.oninput=e=>{cardSearchQuery=e.target.value;renderCardList(cur());});
 $("exportCardsBtn").onclick=exportCards;
 $("importCardsBtn").onclick=()=>$("importCardsFile").click();
 $("importCardsFile").onchange=importCards;
@@ -1110,7 +1131,9 @@ $("msgMenuQuote").onclick=quoteMessage;
 $("msgMenuCopy").onclick=copyMessage;
 $("msgMenuDelete").onclick=deleteMessage;
 $("msgQuoteCancel").onclick=clearQuote;
+$("quoteBar").onclick=clearQuote;
 document.addEventListener("click",e=>{if(!e.target.closest(".msg-menu")&&!e.target.closest(".mg"))hideMsgMenu();});
+document.addEventListener("touchstart",e=>{if($("msgMenu").classList.contains("on")&&!e.target.closest(".msg-menu")&&!e.target.closest(".mg"))hideMsgMenu();},{passive:true});
 $("openCallLog").onclick=()=>{renderCallLogs();$("callLogPage").classList.add("on");};
 $("backCallLog").onclick=()=>$("callLogPage").classList.remove("on");
 $("openMusicPlayer").onclick=()=>{renderMusicList();updateMusicInfo();updatePlayModeUI();$("musicPage").classList.add("on");};
@@ -1181,10 +1204,11 @@ function sendVoice(d,note){addMsg(d,"self","voice",note);triggerReply();}
 function sendRedPacket(){const a=$("rpAmount").value||"1.00";const r=$("rpRemark").value||"恭喜发财，大吉大利";$("redPacketModal").classList.remove("on");addCustom(`<div class="rpc" data-rp-amount="${a}" data-rp-remark="${r}"><div class="rph"><div class="rpi"><svg class="ic" viewBox="0 0 24 24" style="color:#fff;"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M12 9v6M9 12h6"/></svg></div><div><div class="rpt">微信红包</div><div class="rpd">${r}</div></div></div><div class="rpo">待领取</div></div>`,"self");triggerReply();}
 function sendTransfer(){const a=$("transferAmount").value||"10.00";const r=$("transferRemark").value||"";$("transferModal").classList.remove("on");addCustom(`<div class="tfc" data-tf-amount="${a}" data-tf-remark="${r||'转账给你'}"><div class="tfi"><svg class="ic" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><div class="tfa">¥ ${a}</div><div class="tfr">${r||"转账给你"}</div><div class="tff">待领取</div></div>`,"self");triggerReply();}
 function sendLocation(){const n=$("locationName").value||"位置";const a=$("locationAddr").value||"";$("locationModal").classList.remove("on");addCustom(`<div class="loc"><div class="locm"><svg class="ic icl" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="loci"><div class="locn">${n}</div><div class="loca">${a}</div></div></div>`,"self");triggerReply();}
+function sendEmojiReply(cid,avatarOverride,nameOverride){const pool=[];DE.forEach(e=>pool.push({mt:"emojiText",content:e}));if(S.ce&&S.ce.length>0)S.ce.forEach(src=>pool.push({mt:"emoji",content:src}));if(pool.length===0)return;const pick=pool[Math.floor(Math.random()*pool.length)];addMsgToContact(cid,pick.content,"other",pick.mt,null,avatarOverride,nameOverride);}
 function triggerReply(){const c=cur();if(!c)return;const cid=S.cid;const isGroup=c.isGroup;
 /* 1%概率对方主动发起通话 */
 if(Math.random()<0.01){const callDelay=randInt(S.riMin,S.riMax);const t=setTimeout(()=>{simulateIncomingCall(cid,Math.random()<0.5?"voice":"video");},callDelay);pendingTimers.push(t);return;}
-const count=isGroup?randInt(S.grcMin,S.grcMax):randInt(S.rcMin,S.rcMax);showTyping();let delay=0;for(let i=0;i<count;i++){const interval=randInt(S.riMin,S.riMax);delay+=interval;const t=setTimeout(()=>{const cc=S.cs.find(x=>x.id===cid);if(!cc){hideTyping();return;}if(i===count-1)hideTyping();if(isGroup){const member=pickGroupMember(cc);const mc=(member&&member.cards&&member.cards.length>0)?member.cards:cc.cards;if(mc.length===0)return;const card=mc[Math.floor(Math.random()*mc.length)];addMsgToContact(cid,card,"other","text",null,member?member.avatar:null,member?member.name:null);}else{const card=cc.cards[Math.floor(Math.random()*cc.cards.length)];addMsgToContact(cid,card,"other","text");}},delay);pendingTimers.push(t);}
+const count=isGroup?randInt(S.grcMin,S.grcMax):randInt(S.rcMin,S.rcMax);showTyping();let delay=0;for(let i=0;i<count;i++){const interval=randInt(S.riMin,S.riMax);delay+=interval;const t=setTimeout(()=>{const cc=S.cs.find(x=>x.id===cid);if(!cc){hideTyping();return;}if(i===count-1)hideTyping();if(isGroup){const member=pickGroupMember(cc);const mc=(member&&member.cards&&member.cards.length>0)?member.cards:cc.cards;const av=member?member.avatar:null;const nm=member?member.name:null;if(Math.random()<0.2){sendEmojiReply(cid,av,nm);}else if(mc.length>0){const card=mc[Math.floor(Math.random()*mc.length)];addMsgToContact(cid,card,"other","text",null,av,nm);}}else{if(Math.random()<0.2){sendEmojiReply(cid);}else{const card=cc.cards[Math.floor(Math.random()*cc.cards.length)];addMsgToContact(cid,card,"other","text");}}},delay);pendingTimers.push(t);}
 /* 检查是否有待处理的红包/转账 */
 const lastMsgs=c.messages.slice(-3);
 for(const m of lastMsgs){if(m.mt==="custom"&&m.type==="self"&&!m._processed){m._processed=true;if(m.html.includes("rpc")||m.html.includes("tfc")){const isRP=m.html.includes("rpc");let amount="0";const amtMatch=m.html.match(/data-rp-amount="([^"]+)"/)||m.html.match(/data-tf-amount="([^"]+)"/);if(amtMatch)amount=amtMatch[1];const delay2=randInt(S.riMin,S.riMax)+1000;const t2=setTimeout(()=>{const cc=S.cs.find(x=>x.id===cid);if(!cc)return;const accept=Math.random()<0.9;if(accept){S.balance=(parseFloat(S.balance)-parseFloat(amount)).toFixed(2);if(parseFloat(S.balance)<0)S.balance="0.00";addWalletLog(isRP?"rp_send":"tf_send",amount,cc.name,fmtTime());renderBalance();saveS();}const msg=accept?buildAcceptMsg(isRP,amount,cid):buildReturnMsg(isRP,amount,cid);addCustomToContact(cid,msg,"other");},delay2);pendingTimers.push(t2);}}
@@ -1215,10 +1239,10 @@ let cardPool=cc.cards;let member=null;
 if(cc.isGroup){member=pickGroupMember(cc);if(member&&member.cards&&member.cards.length>0){cardPool=member.cards;}}
 if(cardPool.length===0){if(i===count-1)scheduleAutoReply();return;}
 const r=Math.random();
-if(r<0.08){const card=cardPool[Math.floor(Math.random()*cardPool.length)];const amt=(Math.random()*100+0.01).toFixed(2);const rpid="rp_"+Date.now()+Math.floor(Math.random()*1000);addCustomToContact(cid,`<div class="rpc rpc-other" data-rp-id="${rpid}" data-rp-amount="${amt}" data-rp-remark="${card}" onclick="openRPDetail(this,'${cid}')"><div class="rph"><div class="rpi"><svg class="ic" viewBox="0 0 24 24" style="color:#fff;"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M12 9v6M9 12h6"/></svg></div><div><div class="rpt">红包</div><div class="rpd">${card}</div></div></div><div class="rpo">开</div></div>`,"other");
-}else if(r<0.16){const card=cardPool[Math.floor(Math.random()*cardPool.length)];const amt=(Math.random()*500+10).toFixed(2);const tfid="tf_"+Date.now()+Math.floor(Math.random()*1000);addCustomToContact(cid,`<div class="tfc tfc-other" data-tf-id="${tfid}" data-tf-amount="${amt}" data-tf-remark="${card}" onclick="openTFDetail(this,'${cid}')"><div class="tfi"><svg class="ic" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><div class="tfa">¥ ${amt}</div><div class="tfr">${card}</div><div class="tff">待领取</div></div>`,"other");
-}else if(r<0.19&&S.music.playlist&&S.music.playlist.length>0){const song=S.music.playlist[Math.floor(Math.random()*S.music.playlist.length)];if(!song.lost){addCustomToContact(cid,`<div class="music-share" onclick="playSharedMusic('${song.url.replace(/'/g,"\\'")}','${song.name.replace(/'/g,"\\'")}')"><div class="ms-cover"><svg class="ic" viewBox="0 0 24 24" style="color:#fff;width:20px;height:20px;"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="ms-info"><div class="ms-name">${song.name}</div><div class="ms-type">🎵 点击播放</div></div></div>`,"other");}else{const card=cardPool[Math.floor(Math.random()*cardPool.length)];if(cc.isGroup){addMsgToContact(cid,card,"other","text",null,member?member.avatar:null,member?member.name:null);}else{addMsgToContact(cid,card,"other","text");}}
-}else{const card=cardPool[Math.floor(Math.random()*cardPool.length)];if(cc.isGroup){addMsgToContact(cid,card,"other","text",null,member?member.avatar:null,member?member.name:null);}else{addMsgToContact(cid,card,"other","text");}}
+if(r<0.04){const card=cardPool[Math.floor(Math.random()*cardPool.length)];const amt=(Math.random()*100+0.01).toFixed(2);const rpid="rp_"+Date.now()+Math.floor(Math.random()*1000);addCustomToContact(cid,`<div class="rpc rpc-other" data-rp-id="${rpid}" data-rp-amount="${amt}" data-rp-remark="${card}" onclick="openRPDetail(this,'${cid}')"><div class="rph"><div class="rpi"><svg class="ic" viewBox="0 0 24 24" style="color:#fff;"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M12 9v6M9 12h6"/></svg></div><div><div class="rpt">红包</div><div class="rpd">${card}</div></div></div><div class="rpo">开</div></div>`,"other");
+}else if(r<0.08){const card=cardPool[Math.floor(Math.random()*cardPool.length)];const amt=(Math.random()*500+10).toFixed(2);const tfid="tf_"+Date.now()+Math.floor(Math.random()*1000);addCustomToContact(cid,`<div class="tfc tfc-other" data-tf-id="${tfid}" data-tf-amount="${amt}" data-tf-remark="${card}" onclick="openTFDetail(this,'${cid}')"><div class="tfi"><svg class="ic" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><div class="tfa">¥ ${amt}</div><div class="tfr">${card}</div><div class="tff">待领取</div></div>`,"other");
+}else if(r<0.10&&S.music.playlist&&S.music.playlist.length>0){const song=S.music.playlist[Math.floor(Math.random()*S.music.playlist.length)];if(!song.lost){addCustomToContact(cid,`<div class="music-share" onclick="playSharedMusic('${song.url.replace(/'/g,"\\'")}','${song.name.replace(/'/g,"\\'")}')"><div class="ms-cover"><svg class="ic" viewBox="0 0 24 24" style="color:#fff;width:20px;height:20px;"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="ms-info"><div class="ms-name">${song.name}</div><div class="ms-type">🎵 点击播放</div></div></div>`,"other");}else{const av=member?member.avatar:null;const nm=member?member.name:null;if(Math.random()<0.2){sendEmojiReply(cid,av,nm);}else{const card=cardPool[Math.floor(Math.random()*cardPool.length)];if(cc.isGroup){addMsgToContact(cid,card,"other","text",null,av,nm);}else{addMsgToContact(cid,card,"other","text");}}}
+}else{const av=member?member.avatar:null;const nm=member?member.name:null;if(Math.random()<0.2){sendEmojiReply(cid,av,nm);}else{const card=cardPool[Math.floor(Math.random()*cardPool.length)];if(cc.isGroup){addMsgToContact(cid,card,"other","text",null,av,nm);}else{addMsgToContact(cid,card,"other","text");}}}
 if(i===count-1)scheduleAutoReply();},delay);}}else{scheduleAutoReply();}},interval);}
 function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
 function pickGroupMember(c){if(!c.members||c.members.length===0)return null;const mid=c.members[Math.floor(Math.random()*c.members.length)];return S.cs.find(x=>x.id===mid)||null;}
@@ -1237,7 +1261,7 @@ function scrollBottom(){const ca=$("chatArea");ca.scrollTop=ca.scrollHeight;requ
 function clearReply(){replyTimers.forEach(t=>clearTimeout(t));replyTimers=[];if(document.querySelector(".tp"))hideTyping();}
 function safeClearReply(){/* 切换联系人时不清除正在等待的回复 */}
 function closePanels(){$("emojiPanel").classList.remove("on");$("morePanel").classList.remove("on");}
-function openSettings(){renderSettings();$("chatSettingsPage").classList.add("on");$("chatSettingsPage").querySelector(".as-body").classList.add("locked");$("editSettingsBtn").textContent="编辑";}
+function openSettings(){cardSearchQuery="";const si=$("cardSearchInput");if(si)si.value="";renderSettings();$("chatSettingsPage").classList.add("on");$("chatSettingsPage").querySelector(".as-body").classList.add("locked");$("editSettingsBtn").textContent="编辑";}
 function closeSettings(){$("chatSettingsPage").classList.remove("on");}
 function toggleEditSettings(){const body=$("chatSettingsPage").querySelector(".as-body");const locked=body.classList.contains("locked");if(locked){body.classList.remove("locked");$("editSettingsBtn").textContent="完成";}else{body.classList.add("locked");$("editSettingsBtn").textContent="编辑";saveS();}}
 function startCall(type){const c=cur();if(!c)return;callType=type||"voice";closePanels();$("callName").textContent=c.name;$("callStatusText").textContent="正在呼叫...";$("callTimer").style.display="none";callSeconds=0;const av=$("callAvatar");if(c.isGroup&&c.members&&c.members.length>=2){const m1=S.cs.find(x=>x.id===c.members[0]);const m2=S.cs.find(x=>x.id===c.members[1]);av.innerHTML=`<div class="call-avatar-group"><div class="ca-half">${m1&&m1.avatar?`<img src="${m1.avatar}">`:"👤"}</div><div class="ca-half">${m2&&m2.avatar?`<img src="${m2.avatar}">`:"👤"}</div></div>`;$("callBg").style.backgroundImage="";}else{if(c.avatar)av.innerHTML=`<img src="${c.avatar}">`;else av.innerHTML="👤";$("callBg").style.backgroundImage=c.avatar?`url(${c.avatar})`:"";}if(type==="video"){$("callVideoArea").style.display="flex";const sv=$("callSelfVideo");if(S.me.avatar)sv.innerHTML=`<img src="${S.me.avatar}">`;else sv.innerHTML="👤";}else{$("callVideoArea").style.display="none";}$("callPage").classList.add("on");setTimeout(()=>{$("callStatusText").textContent=type==="video"?"视频通话中":"语音通话中";$("callTimer").style.display="block";callTimer=setInterval(()=>{callSeconds++;const m=String(Math.floor(callSeconds/60)).padStart(2,"0");const s=String(callSeconds%60).padStart(2,"0");$("callTimer").textContent=`${m}:${s}`;},1000);},2000);}
@@ -1328,11 +1352,11 @@ el.addEventListener("mousemove",move);
 let px,py;const start2=e=>{const t=e.touches?e.touches[0]:e;px=t.clientX;py=t.clientY;longPressTimer=setTimeout(()=>{longPressMsg=msg;showMsgMenu(px,py);},500);};const cancel=()=>{if(longPressTimer){clearTimeout(longPressTimer);longPressTimer=null;}};const move2=e=>{const t=e.touches?e.touches[0]:e;if(Math.abs(t.clientX-px)>10||Math.abs(t.clientY-py)>10)cancel();};el.addEventListener("mousedown",start2);el.addEventListener("touchstart",start2,{passive:true});el.addEventListener("mousemove",move2);el.addEventListener("touchmove",move2,{passive:true});el.addEventListener("mouseup",cancel);el.addEventListener("mouseleave",cancel);el.addEventListener("touchend",cancel);el.addEventListener("touchcancel",cancel);}
 function showMsgMenu(x,y){const menu=$("msgMenu");menu.classList.add("on");const mw=menu.offsetWidth||120,mh=menu.offsetHeight||120;let mx=x,my=y;if(mx+mw>window.innerWidth)mx=window.innerWidth-mw-8;if(my+mh>window.innerHeight)my=window.innerHeight-mh-8;menu.style.left=mx+"px";menu.style.top=my+"px";}
 function hideMsgMenu(){$("msgMenu").classList.remove("on");}
-function quoteMessage(msg){const m=msg||longPressMsg;if(!m)return;const c=cur();if(!c)return;const quoteText=m.mt==="text"?m.content.slice(0,40):m.mt==="emojiText"?m.content:m.mt==="emoji"?"[表情]":m.mt==="image"?"[图片]":m.mt==="voice"?"[语音]":m.mt==="custom"?(m.html.includes("rpc")?"[红包]":m.html.includes("tfc")?"[转账]":m.html.includes("loc")?"[位置]":"[消息]"):"";if(quoteText){$("msgQuotePreview").textContent=quoteText;$("quoteBar").style.display="flex";$("msgQuoteCancel").style.display="block";$("msgInput").focus();}hideMsgMenu();}
+function quoteMessage(msg){const m=msg||longPressMsg;if(!m)return;const c=cur();if(!c)return;const quoteText=m.mt==="text"?m.content.slice(0,40):m.mt==="emojiText"?m.content:m.mt==="emoji"?"[表情]":m.mt==="image"?"[图片]":m.mt==="voice"?"[语音]":m.mt==="custom"?(m.html.includes("rpc")?"[红包]":m.html.includes("tfc")?"[转账]":m.html.includes("loc")?"[位置]":"[消息]"):"";if(quoteText){$("msgQuotePreview").textContent=quoteText;$("quoteBar").style.display="flex";$("msgInput").focus();}hideMsgMenu();}
 function copyMessage(){if(!longPressMsg)return;const text=longPressMsg.mt==="text"?longPressMsg.content:longPressMsg.mt==="emojiText"?longPressMsg.content:"";if(text){navigator.clipboard&&navigator.clipboard.writeText(text);toast("已复制");}hideMsgMenu();}
 function deleteMessage(){if(!longPressMsg)return;const c=cur();if(!c)return;const idx=c.messages.indexOf(longPressMsg);if(idx>=0)c.messages.splice(idx,1);saveS();enterChat(c.id);hideMsgMenu();toast("已删除");}
 function getQuoteText(){const t=$("msgQuotePreview").textContent;if(!t||t==="")return null;return t;}
-function clearQuote(){$("msgQuotePreview").textContent="";$("quoteBar").style.display="none";$("msgQuoteCancel").style.display="none";}
+function clearQuote(){$("msgQuotePreview").textContent="";$("quoteBar").style.display="none";}
 function restoreMailboxTimers(){if(!S.mailbox||!S.mailbox.letters)return;const now=Date.now();S.mailbox.letters.forEach(l=>{if(l.status==="sent"&&l.time){const elapsed=now-l.time;const totalDelay=(15+Math.floor(Math.random()*16))*60*1000;if(elapsed>=totalDelay){deliverLetter(l.id);}else{l.deliverTimer=setTimeout(()=>deliverLetter(l.id),totalDelay-elapsed);}}else if(l.status==="delivered"&&l.time){const replyDelay=(1+Math.floor(Math.random()*5))*60*60*1000;if(elapsed>=replyDelay){replyLetter(l.id);}else{l.replyTimer=setTimeout(()=>replyLetter(l.id),replyDelay-elapsed);}}});}
 init();
 </script>

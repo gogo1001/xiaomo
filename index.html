@@ -277,12 +277,16 @@ body.dk .iw{background:#2C2C2C;border-color:#444}
 .atr{display:flex;gap:8px;padding:0 18px;margin-top:10px}
 .atr input{flex:1;padding:6px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px;outline:none;font-family:inherit;background:transparent;color:var(--t1)}
 .atr button{padding:0 12px;border:none;background:var(--green);color:#fff;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit}
-.cml{max-height:160px;overflow-y:auto;border:1px solid var(--bd);border-radius:6px;margin:0 18px}
+.cml{max-height:400px;overflow-y:auto;border:1px solid var(--bd);border-radius:6px;margin:0 18px}
 .cmi{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;font-size:13px;border-bottom:.5px solid var(--bd)}
 .cmi:last-child{border-bottom:none}
 .cdl{color:#FF6B6B;cursor:pointer;font-size:12px;flex-shrink:0}
 .cel{color:var(--green);cursor:pointer;font-size:12px;flex-shrink:0;margin-left:4px}
 .cct{text-align:center;font-size:11px;color:var(--t2);margin-top:8px}
+.card-page-bar{display:flex;align-items:center;justify-content:center;gap:12px;padding:8px 18px;margin-top:4px}
+.card-page-btn{padding:4px 12px;border:.5px solid var(--bd);border-radius:4px;background:var(--lbg);color:var(--t1);font-size:12px;cursor:pointer;font-family:inherit}
+.card-page-btn:active{background:var(--ibg)}
+.card-page-info{font-size:12px;color:var(--t2)}
 .dbtn{width:calc(100% - 36px);margin:10px 18px;padding:12px;border:1px solid #FF6B6B;background:transparent;color:#FF6B6B;border-radius:8px;cursor:pointer;font-size:14px;font-family:inherit}
 .iebtn{width:calc(50% - 22px);margin:10px 4px;padding:10px;border:1px solid var(--green);background:transparent;color:var(--green);border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit}
 .hf{display:none}
@@ -701,7 +705,7 @@ body.dk .iw{background:#2C2C2C;border-color:#444}
 <div class="sg"><div class="sgt">抽卡设置</div><div class="si"><span>回复条数范围</span><span class="sv"><span id="countMinValue">1</span>-<span id="countMaxValue">2</span> 条</span></div><div class="sw-double"><div class="sw-row"><span class="sw-label">最少</span><input type="range" id="countMinSlider" min="1" max="8" value="1" step="1"></div><div class="sw-row"><span class="sw-label">最多</span><input type="range" id="countMaxSlider" min="1" max="8" value="2" step="1"></div></div><div class="sw-hint">每次随机在此范围内抽取回复条数</div><div class="si" style="margin-top:10px;"><span>回复间隔范围</span><span class="sv"><span id="intervalMinValue">1</span>-<span id="intervalMaxValue">3</span> 秒</span></div><div class="sw-double"><div class="sw-row"><span class="sw-label">最快</span><input type="range" id="intervalMinSlider" min="1" max="600" value="1" step="1"></div><div class="sw-row"><span class="sw-label">最慢</span><input type="range" id="intervalMaxSlider" min="1" max="600" value="3" step="1"></div></div><div class="sw-hint">每条消息间隔随机在此范围（最长10分钟）</div><div class="si" style="margin-top:10px;"><span>禁用文字Emoji</span><span class="sv"><label style="cursor:pointer;"><input type="checkbox" id="disableEmojiSwitch"> 开启</label></span></div><div class="sw-hint">开启后对方不会发送文字表情，只会从自定义表情包中抽取图片表情</div></div>
 <div class="sg" id="groupSettings" style="display:none;"><div class="sgt">群聊回复设置</div><div class="si"><span>群聊回复条数</span><span class="sv"><span id="groupCountMinValue">1</span>-<span id="groupCountMaxValue">3</span> 条</span></div><div class="sw-double"><div class="sw-row"><span class="sw-label">最少</span><input type="range" id="groupCountMinSlider" min="1" max="8" value="1" step="1"></div><div class="sw-row"><span class="sw-label">最多</span><input type="range" id="groupCountMaxSlider" min="1" max="8" value="3" step="1"></div></div><div class="sw-hint">群聊中随机联系人发送，条数在此范围随机</div></div>
 <div class="sg"><div class="sgt">对方主动发消息</div><div class="si"><span>开启主动消息</span><span class="sv"><label style="cursor:pointer;"><input type="checkbox" id="autoReplySwitch"> 开启</label></span></div><div class="sw-hint">开启后对方会按设定间隔自动发消息给你</div><div class="si" style="margin-top:10px;"><span>消息间隔范围</span><span class="sv"><span id="autoReplyMinValue">5</span>-<span id="autoReplyMaxValue">30</span> 秒</span></div><div class="sw-double"><div class="sw-row"><span class="sw-label">最快</span><input type="range" id="autoReplyMinSlider" min="3" max="300" value="5" step="1"></div><div class="sw-row"><span class="sw-label">最慢</span><input type="range" id="autoReplyMaxSlider" min="3" max="300" value="30" step="1"></div></div><div class="sw-hint">每次随机在此间隔范围内主动发消息（3秒~5分钟）</div></div>
-<div class="sg"><div class="sgt">字卡管理 (当前联系人)</div><div class="atr"><input type="text" id="cardInput" placeholder="输入字卡内容..." maxlength="50"><button id="addCardBtn">添加</button></div><div style="padding:0 18px;margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;"><button class="iebtn" id="exportCardsBtn">导出字卡</button><button class="iebtn" id="importCardsBtn">导入字卡</button><button class="iebtn" id="batchImportBtn">批量导入</button><button class="iebtn" id="batchDeleteBtn">批量删除</button></div><div style="padding:0 18px;margin-top:8px;"><input type="text" id="cardSearchInput" placeholder="搜索字卡..." style="width:100%;padding:8px 12px;border:.5px solid var(--bd);border-radius:6px;background:var(--lbg);color:var(--t1);font-size:13px;font-family:inherit;outline:none;"></div><div class="cml" id="cardList" style="margin-top:10px;"></div><div class="cct" id="cardCount">共 100 张字卡</div><div class="cct" style="margin-top:2px;"><span class="dedupe-link" id="dedupeBtn">去重当前字卡</span></div><div class="bat-bar" id="batchBar"><label><input type="checkbox" id="selectAllCards"> 全选</label><span class="bat-count" id="batchSelCount">已选 0 张</span><span style="flex:1;"></span><button class="bat-del" id="batchDeleteConfirm">删除选中</button><button class="bat-done" id="batchDeleteDone">完成</button></div></div>
+<div class="sg"><div class="sgt">字卡管理 (当前联系人)</div><div class="atr"><input type="text" id="cardInput" placeholder="输入字卡内容..." maxlength="50"><button id="addCardBtn">添加</button></div><div style="padding:0 18px;margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;"><button class="iebtn" id="exportCardsBtn">导出字卡</button><button class="iebtn" id="importCardsBtn">导入字卡</button><button class="iebtn" id="batchImportBtn">批量导入</button><button class="iebtn" id="batchDeleteBtn">批量删除</button></div><div style="padding:0 18px;margin-top:8px;"><input type="text" id="cardSearchInput" placeholder="搜索字卡..." style="width:100%;padding:8px 12px;border:.5px solid var(--bd);border-radius:6px;background:var(--lbg);color:var(--t1);font-size:13px;font-family:inherit;outline:none;"></div><div class="cml" id="cardList" style="margin-top:10px;"></div><div class="card-page-bar" id="cardPageBar" style="display:none;"><button class="card-page-btn" id="cardPrevBtn">上一页</button><span class="card-page-info" id="cardPageInfo">第 1/1 页</span><button class="card-page-btn" id="cardNextBtn">下一页</button></div><div class="cct" id="cardCount">共 100 张字卡</div><div class="cct" style="margin-top:2px;"><span class="dedupe-link" id="dedupeBtn">去重当前字卡</span></div><div class="bat-bar" id="batchBar"><label><input type="checkbox" id="selectAllCards"> 全选</label><span class="bat-count" id="batchSelCount">已选 0 张</span><span style="flex:1;"></span><button class="bat-del" id="batchDeleteConfirm">删除选中</button><button class="bat-done" id="batchDeleteDone">完成</button></div></div>
 <div class="sg"><div class="sgt">聊天背景</div><div class="si" id="setWallpaper"><span>设置当前聊天背景</span><span class="sv">点击选择</span></div><div class="si" id="resetWallpaper"><span>恢复默认背景</span><span class="sv"></span></div></div>
 <button class="dbtn" id="clearChatBtn">清空聊天记录</button>
 </div>
@@ -860,6 +864,7 @@ body.dk .iw{background:#2C2C2C;border-color:#444}
 <div class="mk" id="rpDetailModal"><div class="md rp-detail" style="padding:0;overflow:hidden"><div class="rp-detail-head"><div class="rp-detail-icon"><svg class="ic" viewBox="0 0 24 24" style="color:#fff;width:24px;height:24px;"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M12 9v6M9 12h6"/></svg></div><div class="rp-detail-amount" id="rpDetailAmount">¥ 0.00</div><div class="rp-detail-remark" id="rpDetailRemark"></div></div><div class="rp-detail-body"><div class="rp-detail-sender" id="rpDetailSender"></div><div class="rp-detail-btns"><button class="rp-detail-btn return" id="rpReturnBtn">退回</button><button class="rp-detail-btn accept" id="rpAcceptBtn">领取</button></div></div></div></div>
 <div class="mk" id="tfDetailModal"><div class="md rp-detail" style="padding:0;overflow:hidden"><div class="rp-detail-head" style="background:var(--green)"><div class="rp-detail-icon"><svg class="ic" viewBox="0 0 24 24" style="color:#fff;width:24px;height:24px;"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><div class="rp-detail-amount" id="tfDetailAmount">¥ 0.00</div><div class="rp-detail-remark" id="tfDetailRemark"></div></div><div class="rp-detail-body"><div class="rp-detail-sender" id="tfDetailSender"></div><div class="rp-detail-btns"><button class="rp-detail-btn return" id="tfReturnBtn">退还</button><button class="rp-detail-btn accept" id="tfAcceptBtn" style="background:var(--green)">收款</button></div></div></div></div>
 <div class="mk" id="batchImportModal"><div class="md"><div class="mh">批量导入字卡</div><div class="mb"><textarea class="mit" id="batchImportText" placeholder="每行一条字卡，自动去重&#10;例如：&#10;你好呀&#10;在吗&#10;最近怎么样"></textarea><div class="mit-hint">每行一条，自动去除空行和重复内容，与已有字卡也会自动去重</div></div><div class="mf"><button class="mbtn cc" data-close="batchImportModal">取消</button><button class="mbtn cf" id="confirmBatchImport">导入</button></div></div></div>
+<div class="mk" id="cardEditorModal"><div class="md"><div class="mh" id="cardEditorTitle">编辑字卡</div><div class="mb"><textarea class="mit" id="cardEditorText" placeholder="输入字卡内容..." style="min-height:80px;"></textarea><div class="mit-hint" id="cardEditorHint">修改后点击保存即可更新</div></div><div class="mf" style="flex-wrap:wrap;gap:6px;"><button class="mbtn cc" id="cardEditorPrev" style="flex:1;">上一张</button><button class="mbtn cc" data-close="cardEditorModal" style="flex:1;">取消</button><button class="mbtn cf" id="cardEditorSave" style="flex:1;">保存</button><button class="mbtn cc" id="cardEditorNext" style="flex:1;">下一张</button></div><div style="text-align:center;font-size:11px;color:var(--t2);margin-top:6px;" id="cardEditorPos">第 1/1 张</div></div></div>
 
 <input type="file" class="hf" id="otherAvatarFile" accept="image/*">
 <input type="file" class="hf" id="myAvatarFile" accept="image/*">
@@ -1014,15 +1019,19 @@ function renderContacts(){$("contactsList").innerHTML="";S.cs.filter(c=>!c.isGro
 function renderChatHeader(){const c=cur();if(!c)return;$("chatTitle").textContent=c.name;$("chatStatus").textContent=c.status;}
 function renderSettings(){const c=cur();if(!c)return;$("otherNameInput").value=c.name;$("otherAvatarValue").textContent=c.avatar?"已设置":"点击更换";$("randomStatusSwitch").checked=c.randomStatus;renderStatusList(c);$("countMinSlider").value=S.rcMin;$("countMaxSlider").value=S.rcMax;$("countMinValue").textContent=S.rcMin;$("countMaxValue").textContent=S.rcMax;$("intervalMinSlider").value=Math.round(S.riMin/1000);$("intervalMaxSlider").value=Math.round(S.riMax/1000);$("intervalMinValue").textContent=Math.round(S.riMin/1000);$("intervalMaxValue").textContent=Math.round(S.riMax/1000);$("groupCountMinSlider").value=S.grcMin;$("groupCountMaxSlider").value=S.grcMax;$("groupCountMinValue").textContent=S.grcMin;$("groupCountMaxValue").textContent=S.grcMax;$("groupSettings").style.display=c.isGroup?"block":"none";$("autoReplySwitch").checked=S.autoReply;$("autoReplyMinSlider").value=S.autoReplyMin;$("autoReplyMaxSlider").value=S.autoReplyMax;$("autoReplyMinValue").textContent=S.autoReplyMin;$("autoReplyMaxValue").textContent=S.autoReplyMax;$("disableEmojiSwitch").checked=S.disableEmoji;renderCardList(c);if(S.wp)$("chatArea").style.backgroundImage=`url(${S.wp})`;else $("chatArea").style.backgroundImage="";}
 function renderStatusList(c){$("statusList").innerHTML="";c.statusList.forEach((s,i)=>{const t=document.createElement("span");t.className="tg"+(s===c.status?" on":"");t.innerHTML=`${s} <span class="tdl" data-i="${i}">×</span>`;t.onclick=e=>{if(e.target.classList.contains("tdl")){c.statusList.splice(i,1);if(c.status===s&&c.statusList.length>0)c.status=c.statusList[0];saveS();renderAll();}else{c.status=s;c.randomStatus=false;$("randomStatusSwitch").checked=false;stopStatusRandom();saveS();renderAll();}};$("statusList").appendChild(t);});}
-let batchDeleteMode=false;let selectedCards=new Set();let batchContactId=null;let cardSearchQuery="";
+let batchDeleteMode=false;let selectedCards=new Set();let batchContactId=null;let cardSearchQuery="";let cardPage=1;const CARDS_PER_PAGE=30;
 function renderCardList(c){
   if(!c)return;
   if(batchDeleteMode&&batchContactId!==c.id){selectedCards.clear();batchContactId=c.id;$("selectAllCards").checked=false;}
   $("cardList").innerHTML="";
-  const limit=batchDeleteMode?500:50;
   let cardsToShow=c.cards.map((t,i)=>({text:t,idx:i}));
-  if(cardSearchQuery){cardsToShow=cardsToShow.filter(item=>item.text.toLowerCase().includes(cardSearchQuery.toLowerCase()));}
-  cardsToShow=cardsToShow.slice(0,limit);
+  if(cardSearchQuery){cardsToShow=cardsToShow.filter(item=>item.text.toLowerCase().includes(cardSearchQuery.toLowerCase()));if(cardPage>1)cardPage=1;}
+  const totalCards=cardsToShow.length;
+  const totalPages=Math.max(1,Math.ceil(totalCards/CARDS_PER_PAGE));
+  if(cardPage>totalPages)cardPage=totalPages;
+  const startIdx=(cardPage-1)*CARDS_PER_PAGE;
+  const endIdx=startIdx+CARDS_PER_PAGE;
+  cardsToShow=cardsToShow.slice(startIdx,endIdx);
   if(cardsToShow.length===0){const e=document.createElement("div");e.style.cssText="text-align:center;padding:20px;color:var(--t2);font-size:13px;";e.textContent=cardSearchQuery?"未找到匹配的字卡":"暂无字卡";$("cardList").appendChild(e);}
   else{cardsToShow.forEach(item=>{
     const d=document.createElement("div");
@@ -1041,11 +1050,16 @@ function renderCardList(c){
         updateBatchCount(c);
       };
     }else{
-      d.innerHTML=`<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${item.text}</span><span class="cel" data-i="${item.idx}">编辑</span><span class="cdl" data-i="${item.idx}">删除</span>`;
+      d.innerHTML=`<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;" class="card-text" data-i="${item.idx}">${item.text}</span><span class="cel" data-i="${item.idx}">编辑</span><span class="cdl" data-i="${item.idx}">删除</span>`;
     }
     $("cardList").appendChild(d);
   });}
-  $("cardCount").textContent=`共 ${c.cards.length} 张字卡`;
+  $("cardCount").textContent=`共 ${c.cards.length} 张字卡${cardSearchQuery?`（筛选到 ${totalCards} 张）`:""}`;
+  const pgBar=$("cardPageBar");
+  if(pgBar){
+    if(totalPages>1){pgBar.style.display="flex";$("cardPageInfo").textContent=`第 ${cardPage}/${totalPages} 页`;$("cardPrevBtn").style.visibility=cardPage>1?"visible":"hidden";$("cardNextBtn").style.visibility=cardPage<totalPages?"visible":"hidden";}
+    else{pgBar.style.display="none";}
+  }
   if(batchDeleteMode){
     $("batchBar").classList.add("on");
     updateBatchCount(c);
@@ -1062,22 +1076,55 @@ function renderCardList(c){
     $("cardList").querySelectorAll(".cel").forEach(b=>b.onclick=e=>{
       e.stopPropagation();
       const i=parseInt(e.target.dataset.i);
-      const newText=prompt("编辑字卡内容：",c.cards[i]);
-      if(newText===null)return;
-      const trimmed=newText.trim();
-      if(!trimmed){toast("内容不能为空");return;}
-      c.cards[i]=trimmed;
-      saveS();
-      renderCardList(c);
-      toast("已修改");
+      openCardEditor(c,i);
+    });
+    $("cardList").querySelectorAll(".card-text").forEach(b=>b.onclick=e=>{
+      e.stopPropagation();
+      const i=parseInt(e.target.dataset.i);
+      openCardEditor(c,i);
     });
   }
 }
+let cardEditorState={contact:null,idx:0};
+function openCardEditor(c,idx){
+  if(!c||!c.cards||c.cards.length===0)return;
+  cardEditorState={contact:c,idx:Math.max(0,Math.min(idx,c.cards.length-1))};
+  updateCardEditorUI();
+  $("cardEditorModal").classList.add("on");
+  setTimeout(()=>$("cardEditorText").focus(),100);
+}
+function updateCardEditorUI(){
+  const{contact:c,idx}=cardEditorState;
+  if(!c||!c.cards||c.cards.length===0){$("cardEditorModal").classList.remove("on");return;}
+  cardEditorState.idx=Math.max(0,Math.min(idx,c.cards.length-1));
+  $("cardEditorText").value=c.cards[cardEditorState.idx];
+  $("cardEditorPos").textContent=`第 ${cardEditorState.idx+1}/${c.cards.length} 张`;
+  $("cardEditorPrev").style.opacity=cardEditorState.idx>0?"1":"0.4";
+  $("cardEditorNext").style.opacity=cardEditorState.idx<c.cards.length-1?"1":"0.4";
+}
+function saveCardEditorCard(){
+  const{contact:c,idx}=cardEditorState;
+  if(!c)return;
+  const newText=$("cardEditorText").value.trim();
+  if(!newText){toast("内容不能为空");return;}
+  c.cards[idx]=newText;
+  saveS();
+  renderCardList(c);
+  toast("已保存");
+}
+function cardEditorNav(dir){
+  const{contact:c,idx}=cardEditorState;
+  if(!c)return;
+  const newIdx=idx+dir;
+  if(newIdx<0||newIdx>=c.cards.length)return;
+  cardEditorState.idx=newIdx;
+  updateCardEditorUI();
+}
 function updateBatchCount(c){
   const n=selectedCards.size;
-  const visible=Math.min(c?c.cards.length:0,500);
+  const total=c?c.cards.length:0;
   $("batchSelCount").textContent=`已选 ${n} 张`;
-  $("selectAllCards").checked=n>0&&n===visible;
+  $("selectAllCards").checked=n>0&&n===total;
 }
 function toggleBatchDelete(){
   const c=cur();
@@ -1106,7 +1153,7 @@ function confirmBatchImport(){
   if(!c)return;
   const text=$("batchImportText").value;
   if(!text.trim()){toast("请输入字卡内容");return;}
-  const newCards=text.split("\n").map(s=>s.trim()).filter(s=>s.length>0);
+  const newCards=text.split("\n").map(s=>s.trim()).filter(s=>isValidCard(s));
   if(newCards.length===0){toast("没有有效的字卡内容");return;}
   const existing=new Set(c.cards.map(s=>s.toLowerCase()));
   const deduped=[];const seen=new Set();let dupCount=0;
@@ -1117,6 +1164,7 @@ function confirmBatchImport(){
   });
   c.cards=[...deduped,...c.cards];
   saveS();
+  cardPage=1;
   renderCardList(c);
   $("batchImportModal").classList.remove("on");
   if(dupCount>0)toast(`已导入${deduped.length}张，自动去重${dupCount}张`);
@@ -1143,7 +1191,7 @@ function renderStats(){const tc=S.cs.reduce((s,c)=>s+c.cards.length,0);$("statCo
 function renderMoments(){$("momentsMyName").textContent=S.me.name;const ma=$("momentsMyAvatar");if(S.me.avatar)ma.innerHTML=`<img src="${S.me.avatar}">`;else ma.innerHTML="👤";const mc=$("momentsCover");if(S.momentsCover){mc.style.backgroundImage=`url(${S.momentsCover})`;mc.style.backgroundSize="cover";mc.style.backgroundPosition="center";}else{mc.style.backgroundImage="";mc.style.background="linear-gradient(135deg,#667eea 0%,#764ba2 100%)";}const list=$("momentsList");if(S.moments.length===0){list.innerHTML=`<div class="moments-empty"><div class="moments-empty-icon">📷</div><div class="moments-empty-text">还没有发布朋友圈</div></div>`;return;}list.innerHTML="";S.moments.forEach(m=>{const d=document.createElement("div");d.className="moment-item";const ah=S.me.avatar?`<img src="${S.me.avatar}">`:"👤";d.innerHTML=`<div class="moment-avatar">${ah}</div><div class="moment-content"><div class="moment-name">${S.me.name}</div><div class="moment-text">${m.text}</div><div class="moment-time">${m.time}</div></div>`;list.appendChild(d);});}
 function startStatusRandom(){stopStatusRandom();const scheduleNext=()=>{const delay=(60+Math.floor(Math.random()*61))*60*1000;statusTimer=setTimeout(()=>{const c=cur();if(c&&c.randomStatus&&c.statusList.length>0){c.status=c.statusList[Math.floor(Math.random()*c.statusList.length)];$("chatStatus").textContent=c.status;saveS();}scheduleNext();},delay);};scheduleNext();}
 function stopStatusRandom(){if(statusTimer){clearTimeout(statusTimer);statusTimer=null;}}
-function enterChat(id){S.cid=id;renderChatHeader();renderSettings();const c=cur();if(c){c.unread=0;saveS();renderChatList();}$("chatArea").querySelectorAll(".mg,.tp").forEach(m=>m.remove());$("timeDivider").textContent=fmtTime();if(c&&c.messages){c.messages.forEach(msg=>{const m=msg.mt==="custom"?buildCustomEl(msg):buildMsgEl(msg);$("chatArea").appendChild(m);});}showTypingForCurrent();switchPg("chatPage");requestAnimationFrame(()=>{scrollBottom();});startStatusRandom();}
+function enterChat(id){S.cid=id;cardSearchQuery="";cardPage=1;const si=$("cardSearchInput");if(si)si.value="";renderChatHeader();renderSettings();const c=cur();if(c){c.unread=0;saveS();renderChatList();}$("chatArea").querySelectorAll(".mg,.tp").forEach(m=>m.remove());$("timeDivider").textContent=fmtTime();if(c&&c.messages){c.messages.forEach(msg=>{const m=msg.mt==="custom"?buildCustomEl(msg):buildMsgEl(msg);$("chatArea").appendChild(m);});}showTypingForCurrent();switchPg("chatPage");requestAnimationFrame(()=>{scrollBottom();});startStatusRandom();}
 function bindEvents(){
 function safe(id,fn){const el=$(id);if(el)fn(el);else console.warn("元素不存在:",id);}
 document.querySelectorAll(".ti").forEach(t=>t.onclick=()=>switchPg(t.dataset.pg));
@@ -1180,7 +1228,7 @@ safe("autoReplySwitch",el=>el.onchange=e=>{S.autoReply=e.target.checked;if(S.aut
 safe("disableEmojiSwitch",el=>el.onchange=e=>{S.disableEmoji=e.target.checked;renderEmoji();saveS();});
 safe("autoReplyMinSlider",el=>el.oninput=e=>{let v=parseInt(e.target.value);if(v>S.autoReplyMax){v=S.autoReplyMax;e.target.value=v;}S.autoReplyMin=v;$("autoReplyMinValue").textContent=v;saveS();if(S.autoReply){stopAutoReply();startAutoReply();}});
 safe("autoReplyMaxSlider",el=>el.oninput=e=>{let v=parseInt(e.target.value);if(v<S.autoReplyMin){v=S.autoReplyMin;e.target.value=v;}S.autoReplyMax=v;$("autoReplyMaxValue").textContent=v;saveS();if(S.autoReply){stopAutoReply();startAutoReply();}});
-$("addCardBtn").onclick=()=>{const c=cur();const t=$("cardInput").value.trim();if(!t||!c)return;c.cards.unshift(t);$("cardInput").value="";renderCardList(c);saveS();toast("已添加");};
+$("addCardBtn").onclick=()=>{const c=cur();const t=$("cardInput").value.trim();if(!t||!c)return;c.cards.unshift(t);$("cardInput").value="";cardPage=1;renderCardList(c);saveS();toast("已添加");};
 safe("cardSearchInput",el=>el.oninput=e=>{cardSearchQuery=e.target.value;renderCardList(cur());});
 $("exportCardsBtn").onclick=exportCards;
 $("importCardsBtn").onclick=()=>$("importCardsFile").click();
@@ -1190,8 +1238,13 @@ $("batchDeleteBtn").onclick=toggleBatchDelete;
 $("confirmBatchImport").onclick=confirmBatchImport;
 $("batchDeleteConfirm").onclick=deleteSelectedCards;
 $("batchDeleteDone").onclick=()=>{batchDeleteMode=false;$("batchBar").classList.remove("on");renderCardList(cur());};
-$("selectAllCards").onchange=e=>{const c=cur();if(!c||!batchDeleteMode)return;const limit=500;if(e.target.checked){selectedCards=new Set(c.cards.slice(0,limit).map((_,i)=>i));}else{selectedCards.clear();}renderCardList(c);};
+$("selectAllCards").onchange=e=>{const c=cur();if(!c||!batchDeleteMode)return;if(e.target.checked){selectedCards=new Set(c.cards.map((_,i)=>i));}else{selectedCards.clear();}renderCardList(c);};
 $("dedupeBtn").onclick=dedupeCards;
+safe("cardPrevBtn",el=>el.onclick=()=>{if(cardPage>1){cardPage--;renderCardList(cur());}});
+safe("cardNextBtn",el=>el.onclick=()=>{cardPage++;renderCardList(cur());});
+safe("cardEditorSave",el=>el.onclick=saveCardEditorCard);
+safe("cardEditorPrev",el=>el.onclick=()=>cardEditorNav(-1));
+safe("cardEditorNext",el=>el.onclick=()=>cardEditorNav(1));
 $("setOtherAvatar").onclick=()=>$("otherAvatarFile").click();
 $("otherAvatarFile").onchange=e=>handleImg(e,src=>{const c=cur();if(c){c.avatar=src;saveS();renderAll();toast("头像已更换");}});
 $("myAvatarFile").onchange=e=>handleImg(e,src=>{S.me.avatar=src;saveS();renderMy();renderMoments();const pa=$("peAvatar");if(pa)pa.innerHTML=`<img src="${src}">`;toast("头像已更换");});
@@ -1334,8 +1387,8 @@ const count=isGroup?randInt(S.grcMin,S.grcMax):randInt(S.rcMin,S.rcMax);showTypi
 /* 检查是否有待处理的红包/转账 */
 const lastMsgs=c.messages.slice(-3);
 for(const m of lastMsgs){if(m.mt==="custom"&&m.type==="self"&&!m._processed){m._processed=true;if(m.html.includes("rpc")||m.html.includes("tfc")){const isRP=m.html.includes("rpc");let amount="0";const amtMatch=m.html.match(/data-rp-amount="([^"]+)"/)||m.html.match(/data-tf-amount="([^"]+)"/);if(amtMatch)amount=amtMatch[1];const delay2=randInt(S.riMin,S.riMax)+1000;const t2=setTimeout(()=>{const cc=S.cs.find(x=>x.id===cid);if(!cc)return;const accept=Math.random()<0.9;if(accept){S.balance=(parseFloat(S.balance)-parseFloat(amount)).toFixed(2);if(parseFloat(S.balance)<0)S.balance="0.00";addWalletLog(isRP?"rp_send":"tf_send",amount,cc.name,fmtTime());renderBalance();saveS();}const msg=accept?buildAcceptMsg(isRP,amount,cid):buildReturnMsg(isRP,amount,cid);addCustomToContact(cid,msg,"other");},delay2);pendingTimers.push(t2);}}
-/* 2%概率随机发送音乐 */
-if(S.music.playlist&&S.music.playlist.length>0&&Math.random()<0.02){const song=S.music.playlist[Math.floor(Math.random()*S.music.playlist.length)];if(!song.lost){const delay3=delay+randInt(S.riMin,S.riMax);const t3=setTimeout(()=>{const cc=S.cs.find(x=>x.id===cid);if(!cc)return;const musicHtml=`<div class="music-share" onclick="playSharedMusic('${song.url.replace(/'/g,"\\'")}','${song.name.replace(/'/g,"\\'")}')"><div class="ms-cover"><svg class="ic" viewBox="0 0 24 24" style="color:#fff;width:20px;height:20px;"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="ms-info"><div class="ms-name">${song.name}</div><div class="ms-type">🎵 点击播放</div></div></div>`;addCustomToContact(cid,musicHtml,"other");},delay3);pendingTimers.push(t3);}}}}
+/* 1%概率随机发送音乐 */
+if(S.music.playlist&&S.music.playlist.length>0&&Math.random()<0.01){const song=S.music.playlist[Math.floor(Math.random()*S.music.playlist.length)];if(!song.lost){const delay3=delay+randInt(S.riMin,S.riMax);const t3=setTimeout(()=>{const cc=S.cs.find(x=>x.id===cid);if(!cc)return;const musicHtml=`<div class="music-share" onclick="playSharedMusic('${song.url.replace(/'/g,"\\'")}','${song.name.replace(/'/g,"\\'")}')"><div class="ms-cover"><svg class="ic" viewBox="0 0 24 24" style="color:#fff;width:20px;height:20px;"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="ms-info"><div class="ms-name">${song.name}</div><div class="ms-type">🎵 点击播放</div></div></div>`;addCustomToContact(cid,musicHtml,"other");},delay3);pendingTimers.push(t3);}}}}
 function addMsgToContact(cid,content,type,mt,note,avatarOverride,nameOverride){const c=S.cs.find(x=>x.id===cid);if(!c)return;const time=fmtTime();const msg={content,type,mt,note:note||null,avatarOverride:avatarOverride||null,nameOverride:nameOverride||null,quote:null,time};c.messages.push(msg);if(type==="other"&&S.cid!==cid){c.unread=(c.unread||0)+1;}saveS();if(S.cid===cid&&$("chatPage").classList.contains("on")){const m=buildMsgEl(msg);$("chatArea").appendChild(m);scrollBottom();}renderChatList();}
 function addCustomToContact(cid,html,type){const c=S.cs.find(x=>x.id===cid);if(!c)return;const time=fmtTime();const msg={html,type,time,mt:"custom"};c.messages.push(msg);saveS();if(S.cid===cid&&$("chatPage").classList.contains("on")){const m=buildCustomEl(msg);$("chatArea").appendChild(m);scrollBottom();}renderChatList();}
 function addWalletLog(type,amount,contactName,time){if(!S.walletLogs)S.walletLogs=[];S.walletLogs.unshift({id:"wl_"+Date.now()+Math.random().toString(36).slice(2,6),type,amount:parseFloat(amount).toFixed(2),contactName,time,timestamp:Date.now()});if(S.walletLogs.length>100)S.walletLogs=S.walletLogs.slice(0,100);saveS();}
@@ -1363,7 +1416,7 @@ if(cardPool.length===0){if(i===count-1)scheduleAutoReply();return;}
 const r=Math.random();
 if(r<0.04){const card=cardPool[Math.floor(Math.random()*cardPool.length)];const amt=(Math.random()*100+0.01).toFixed(2);const rpid="rp_"+Date.now()+Math.floor(Math.random()*1000);addCustomToContact(cid,`<div class="rpc rpc-other" data-rp-id="${rpid}" data-rp-amount="${amt}" data-rp-remark="${card}" onclick="openRPDetail(this,'${cid}')"><div class="rph"><div class="rpi"><svg class="ic" viewBox="0 0 24 24" style="color:#fff;"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M12 9v6M9 12h6"/></svg></div><div><div class="rpt">红包</div><div class="rpd">${card}</div></div></div><div class="rpo">开</div></div>`,"other");
 }else if(r<0.08){const card=cardPool[Math.floor(Math.random()*cardPool.length)];const amt=(Math.random()*500+10).toFixed(2);const tfid="tf_"+Date.now()+Math.floor(Math.random()*1000);addCustomToContact(cid,`<div class="tfc tfc-other" data-tf-id="${tfid}" data-tf-amount="${amt}" data-tf-remark="${card}" onclick="openTFDetail(this,'${cid}')"><div class="tfi"><svg class="ic" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><div class="tfa">¥ ${amt}</div><div class="tfr">${card}</div><div class="tff">待领取</div></div>`,"other");
-}else if(r<0.10&&S.music.playlist&&S.music.playlist.length>0){const song=S.music.playlist[Math.floor(Math.random()*S.music.playlist.length)];if(!song.lost){addCustomToContact(cid,`<div class="music-share" onclick="playSharedMusic('${song.url.replace(/'/g,"\\'")}','${song.name.replace(/'/g,"\\'")}')"><div class="ms-cover"><svg class="ic" viewBox="0 0 24 24" style="color:#fff;width:20px;height:20px;"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="ms-info"><div class="ms-name">${song.name}</div><div class="ms-type">🎵 点击播放</div></div></div>`,"other");}else{const av=member?member.avatar:null;const nm=member?member.name:null;if(Math.random()<0.09){const sent=sendEmojiReply(cid,av,nm);if(!sent){const card=cardPool[Math.floor(Math.random()*cardPool.length)];if(cc.isGroup){addMsgToContact(cid,card,"other","text",null,av,nm);}else{addMsgToContact(cid,card,"other","text");}}}else{const card=cardPool[Math.floor(Math.random()*cardPool.length)];if(cc.isGroup){addMsgToContact(cid,card,"other","text",null,av,nm);}else{addMsgToContact(cid,card,"other","text");}}}
+}else if(r<0.09&&S.music.playlist&&S.music.playlist.length>0){const song=S.music.playlist[Math.floor(Math.random()*S.music.playlist.length)];if(!song.lost){addCustomToContact(cid,`<div class="music-share" onclick="playSharedMusic('${song.url.replace(/'/g,"\\'")}','${song.name.replace(/'/g,"\\'")}')"><div class="ms-cover"><svg class="ic" viewBox="0 0 24 24" style="color:#fff;width:20px;height:20px;"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="ms-info"><div class="ms-name">${song.name}</div><div class="ms-type">🎵 点击播放</div></div></div>`,"other");}else{const av=member?member.avatar:null;const nm=member?member.name:null;if(Math.random()<0.09){const sent=sendEmojiReply(cid,av,nm);if(!sent){const card=cardPool[Math.floor(Math.random()*cardPool.length)];if(cc.isGroup){addMsgToContact(cid,card,"other","text",null,av,nm);}else{addMsgToContact(cid,card,"other","text");}}}else{const card=cardPool[Math.floor(Math.random()*cardPool.length)];if(cc.isGroup){addMsgToContact(cid,card,"other","text",null,av,nm);}else{addMsgToContact(cid,card,"other","text");}}}
 }else{const av=member?member.avatar:null;const nm=member?member.name:null;if(Math.random()<0.09){const sent=sendEmojiReply(cid,av,nm);if(!sent){const card=cardPool[Math.floor(Math.random()*cardPool.length)];if(cc.isGroup){addMsgToContact(cid,card,"other","text",null,av,nm);}else{addMsgToContact(cid,card,"other","text");}}}else{const card=cardPool[Math.floor(Math.random()*cardPool.length)];if(cc.isGroup){addMsgToContact(cid,card,"other","text",null,av,nm);}else{addMsgToContact(cid,card,"other","text");}}}
 if(i===count-1)scheduleAutoReply();},delay);}}else{scheduleAutoReply();}},interval);}
 function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
@@ -1384,7 +1437,7 @@ function scrollBottom(){const ca=$("chatArea");ca.scrollTop=ca.scrollHeight;requ
 function clearReply(){replyTimers.forEach(t=>clearTimeout(t));replyTimers=[];typingContacts.clear();if(document.querySelector(".tp"))hideTyping();}
 function safeClearReply(){/* 切换联系人时不清除正在等待的回复 */}
 function closePanels(){$("emojiPanel").classList.remove("on");$("morePanel").classList.remove("on");}
-function openSettings(){cardSearchQuery="";const si=$("cardSearchInput");if(si)si.value="";renderSettings();$("chatSettingsPage").classList.add("on");$("chatSettingsPage").querySelector(".as-body").classList.add("locked");$("editSettingsBtn").textContent="编辑";}
+function openSettings(){cardSearchQuery="";cardPage=1;const si=$("cardSearchInput");if(si)si.value="";renderSettings();$("chatSettingsPage").classList.add("on");$("chatSettingsPage").querySelector(".as-body").classList.add("locked");$("editSettingsBtn").textContent="编辑";}
 function closeSettings(){$("chatSettingsPage").classList.remove("on");}
 function toggleEditSettings(){const body=$("chatSettingsPage").querySelector(".as-body");const locked=body.classList.contains("locked");if(locked){body.classList.remove("locked");$("editSettingsBtn").textContent="完成";}else{body.classList.add("locked");$("editSettingsBtn").textContent="编辑";saveS();}}
 function startCall(type){const c=cur();if(!c)return;callType=type||"voice";closePanels();$("callName").textContent=c.name;$("callStatusText").textContent="正在呼叫...";$("callTimer").style.display="none";callSeconds=0;const av=$("callAvatar");if(c.isGroup&&c.members&&c.members.length>=2){const m1=S.cs.find(x=>x.id===c.members[0]);const m2=S.cs.find(x=>x.id===c.members[1]);av.innerHTML=`<div class="call-avatar-group"><div class="ca-half">${m1&&m1.avatar?`<img src="${m1.avatar}">`:"👤"}</div><div class="ca-half">${m2&&m2.avatar?`<img src="${m2.avatar}">`:"👤"}</div></div>`;$("callBg").style.backgroundImage="";}else{if(c.avatar)av.innerHTML=`<img src="${c.avatar}">`;else av.innerHTML="👤";$("callBg").style.backgroundImage=c.avatar?`url(${c.avatar})`:"";}if(type==="video"){$("callVideoArea").style.display="flex";const sv=$("callSelfVideo");if(S.me.avatar)sv.innerHTML=`<img src="${S.me.avatar}">`;else sv.innerHTML="👤";}else{$("callVideoArea").style.display="none";}$("callPage").classList.add("on");setTimeout(()=>{$("callStatusText").textContent=type==="video"?"视频通话中":"语音通话中";$("callTimer").style.display="block";callTimer=setInterval(()=>{callSeconds++;const m=String(Math.floor(callSeconds/60)).padStart(2,"0");const s=String(callSeconds%60).padStart(2,"0");$("callTimer").textContent=`${m}:${s}`;},1000);},2000);}
@@ -1398,25 +1451,19 @@ function simulateIncomingCall(cid,type){if($("callPage").classList.contains("on"
 function exportData(){const data=JSON.stringify(S,null,2);const blob=new Blob([data],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="字卡传讯数据_"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);toast("数据已导出");}
 function importData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(!d.cs||!d.me){toast("文件格式不正确");return;}if(!confirm("导入将覆盖当前所有数据，确定继续吗？"))return;S={...S,...d};if(!S.ce)S.ce=[];fixFields();/* 清空旧的IndexedDB数据后重新保存 */Promise.all([dbClear("messages"),dbClear("assets")]).then(()=>{saveS();}).catch(()=>{saveS();});applyDK();renderAll();startStatusRandom();toast("数据导入成功");}catch(err){toast("文件解析失败");}};r.readAsText(f);e.target.value="";}
 function exportCards(){const c=cur();if(!c)return;const data=c.cards.join("\n");const blob=new Blob([data],{type:"text/plain"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=c.name+"_字卡.txt";document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);toast("字卡已导出");}
-function deepCollectStrings(obj,result,depth){
-if(depth>4||!obj||typeof obj!=="object")return;
-if(Array.isArray(obj)){
-let strs=obj.filter(v=>typeof v==="string"&&v.trim().length>0).map(v=>v.trim());
-if(strs.length>=1){result.push(...strs);return;}
-obj.forEach(v=>deepCollectStrings(v,result,depth+1));
-}else{
-const skipStr=["exportDate","id","name","avatar","status","time","wxid","gender","balance","walletLogs","theme","font"];
-const skipDeep=["modules","moduleList","settings","config","meta","metadata","info","version"];
-for(const k in obj){
-if(!obj.hasOwnProperty(k))continue;
-const v=obj[k];
-if(skipDeep.indexOf(k)!==-1)continue;
-if(typeof v==="string"&&v.trim().length>0&&skipStr.indexOf(k)===-1)result.push(v.trim());
-else if(typeof v==="object")deepCollectStrings(v,result,depth+1);
+function isValidCard(s){
+if(typeof s!=="string")return false;
+s=s.trim();
+if(s.length===0||s.length>200)return false;
+if(/^[A-Za-z0-9+/=]{100,}$/.test(s))return false;
+if(/^https?:\/\//i.test(s))return false;
+if(/^data:|^blob:/i.test(s))return false;
+if(/^\d+$/.test(s))return false;
+if(/^[\{\[].*[\}\]]$/.test(s))return false;
+if(/^[a-zA-Z_]\w*\s*[:=]/.test(s))return false;
+return true;
 }
-}
-}
-function importCards(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{let cards=[];const text=ev.target.result.trim();let parsed=false;try{const d=JSON.parse(text);if(Array.isArray(d)){cards=d.map(s=>String(s).trim()).filter(s=>s.length>0);parsed=true;}else if(d&&typeof d==="object"){if(Array.isArray(d.cs))d.cs.forEach(ct=>{if(ct&&Array.isArray(ct.cards))cards=cards.concat(ct.cards.map(s=>String(s).trim()).filter(s=>s.length>0));});if(Array.isArray(d.cards))cards=cards.concat(d.cards.map(s=>String(s).trim()).filter(s=>s.length>0));["replies","wordcards","words","items","data","list"].forEach(key=>{if(Array.isArray(d[key]))cards=cards.concat(d[key].map(s=>typeof s==="object"?(s.text||s.content||s.value||s.card||""):String(s)).map(s=>String(s).trim()).filter(s=>s.length>0));});if(cards.length===0)deepCollectStrings(d,cards,0);parsed=true;}}catch(je){}if(!parsed){cards=text.split("\n").map(s=>s.trim()).filter(s=>s.length>0);}if(cards.length===0){toast("没有有效的字卡内容");return;}const c=cur();if(!c)return;const existing=new Set(c.cards.map(s=>s.toLowerCase()));const deduped=[];const seen=new Set();let dupCount=0;cards.forEach(s=>{const key=s.toLowerCase();if(seen.has(key)||existing.has(key)){dupCount++;return;}seen.add(key);deduped.push(s);});if(deduped.length===0){toast("字卡已存在，无需重复导入");return;}c.cards=[...deduped,...c.cards];saveS();renderCardList(c);if(dupCount>0)toast(`已导入${deduped.length}张，自动去重${dupCount}张`);else toast(`已导入${deduped.length}张字卡`);}catch(err){toast("文件解析失败");}};r.readAsText(f);e.target.value="";}
+function importCards(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{let cards=[];const text=ev.target.result.trim();let parsed=false;try{const d=JSON.parse(text);if(Array.isArray(d)){cards=d.map(s=>String(s).trim()).filter(s=>isValidCard(s));parsed=true;}else if(d&&typeof d==="object"){if(Array.isArray(d.cs))d.cs.forEach(ct=>{if(ct&&Array.isArray(ct.cards))cards=cards.concat(ct.cards.map(s=>String(s).trim()).filter(s=>isValidCard(s)));});if(Array.isArray(d.cards))cards=cards.concat(d.cards.map(s=>String(s).trim()).filter(s=>isValidCard(s)));["replies","wordcards","words"].forEach(key=>{if(Array.isArray(d[key]))cards=cards.concat(d[key].map(s=>typeof s==="object"?(s.text||s.content||s.value||s.card||""):String(s)).map(s=>String(s).trim()).filter(s=>isValidCard(s)));});parsed=true;}}catch(je){}if(!parsed){cards=text.split("\n").map(s=>s.trim()).filter(s=>isValidCard(s));}if(cards.length===0){toast("没有有效的字卡内容");return;}const c=cur();if(!c)return;const existing=new Set(c.cards.map(s=>s.toLowerCase()));const deduped=[];const seen=new Set();let dupCount=0;cards.forEach(s=>{const key=s.toLowerCase();if(seen.has(key)||existing.has(key)){dupCount++;return;}seen.add(key);deduped.push(s);});if(deduped.length===0){toast("字卡已存在，无需重复导入");return;}c.cards=[...deduped,...c.cards];saveS();cardPage=1;renderCardList(c);if(dupCount>0)toast(`已导入${deduped.length}张，自动去重${dupCount}张`);else toast(`已导入${deduped.length}张字卡`);}catch(err){toast("文件解析失败");}};r.readAsText(f);e.target.value="";}
 function handleImg(e,cb){const f=e.target.files[0];if(!f)return;if(f.size>3*1024*1024){toast("图片过大，请选择3MB以内的图片");e.target.value="";return;}try{const r=new FileReader();r.onload=ev=>cb(ev.target.result);r.onerror=()=>{toast("图片读取失败");e.target.value="";};r.readAsDataURL(f);}catch(err){toast("图片处理失败");e.target.value="";}}
 function toast(t,d=1500){$("toast").textContent=t;$("toast").classList.add("on");setTimeout(()=>$("toast").classList.remove("on"),d);}
 let tttState={board:Array(9).fill(null),myTurn:true,gameOver:false,myScore:0,oppScore:0};

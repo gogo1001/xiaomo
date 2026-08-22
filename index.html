@@ -881,11 +881,55 @@ let tmpAvatar="",selMembers=[],statusTimer=null,replyTimers=[],pendingTimers=[],
 const $=id=>document.getElementById(id);
 function init(){try{loadS();fixFields();applyDK();applyTheme();applyFont();checkLostMusicFiles();if(!S.cs||S.cs.length===0)createDefault();if(!S.cid||!S.cs.find(c=>c.id===S.cid))S.cid=S.cs[0].id;renderAll();$("timeDivider").textContent=fmtTime();bindEvents();startStatusRandom();restoreMailboxTimers();if(S.autoReply)startAutoReply();}catch(e){console.error("初始化失败",e);}setTimeout(()=>{const ls=$("loadingScreen");if(ls){ls.classList.add("hide");setTimeout(()=>{ls.style.display="none";},600);}},800);}
 function fixFields(){if(!S.me.wxid)S.me.wxid="qn_xxxxxx";if(!S.me.gender)S.me.gender="保密";if(!S.balance)S.balance="128.50";if(!S.momentsCover)S.momentsCover="";if(!S.moments)S.moments=[];if(S.theme==null)S.theme="";if(S.font==null)S.font="";const oldFonts=["rounded","kai","song","hei","fangsong","lishu","youyuan","dengxian","xingkai","weibei","hupo","caiyun"];if(oldFonts.includes(S.font))S.font="";if(S.rc!=null&&S.rcMin==null){S.rcMin=1;S.rcMax=S.rc;}if(S.ri!=null&&S.riMin==null){S.riMin=Math.max(1000,S.ri-1000);S.riMax=S.ri;}if(S.rcMin==null)S.rcMin=1;if(S.rcMax==null)S.rcMax=2;if(S.riMin==null)S.riMin=1000;if(S.riMax==null)S.riMax=3000;if(S.grcMin==null)S.grcMin=1;if(S.grcMax==null)S.grcMax=3;if(S.autoReply==null)S.autoReply=false;if(S.autoReplyMin==null)S.autoReplyMin=5;if(S.autoReplyMax==null)S.autoReplyMax=30;S.rcMax=Math.min(8,S.rcMax);S.rcMin=Math.min(S.rcMin,S.rcMax);S.riMax=Math.min(600000,S.riMax);S.riMin=Math.min(S.riMin,S.riMax);S.grcMax=Math.min(8,S.grcMax);S.grcMin=Math.min(S.grcMin,S.grcMax);if(!S.callLogs)S.callLogs=[];if(!S.walletLogs)S.walletLogs=[];if(!S.music)S.music={playlist:[],currentIdx:-1,cover:"",playing:false,playMode:"list"};if(!S.music.playlist)S.music.playlist=[];if(!S.music.playMode)S.music.playMode="list";if(!S.mailbox)S.mailbox={letters:[]};if(!S.mailbox.letters)S.mailbox.letters=[];S.cs.forEach(c=>{if(!c.messages)c.messages=[];if(c.unread==null)c.unread=0;});}
+let emojiDB=null;
+function initEmojiDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open("qnEmojiDB",1);req.onupgradeneeded=e=>{const db=e.target.result;if(!db.objectStoreNames.contains("emojis")){db.createObjectStore("emojis",{keyPath:"id"});}};req.onsuccess=e=>{emojiDB=e.target.result;resolve(emojiDB);};req.onerror=e=>reject(e.target.error);});}
+function saveEmojiToDB(id,dataUrl){return new Promise((resolve,reject)=>{if(!emojiDB){reject("DB not ready");return;}const tx=emojiDB.transaction("emojis","readwrite");const store=tx.objectStore("emojis");store.put({id,data:dataUrl});tx.oncomplete=()=>resolve();tx.onerror=e=>reject(e.target.error);});}
+function deleteEmojiFromDB(id){return new Promise((resolve,reject)=>{if(!emojiDB){reject("DB not ready");return;}const tx=emojiDB.transaction("emojis","readwrite");const store=tx.objectStore("emojis");store.delete(id);tx.oncomplete=()=>resolve();tx.onerror=e=>reject(e.target.error);});}
+function loadEmojisFromDB(){return new Promise((resolve,reject)=>{if(!emojiDB){reject("DB not ready");return;}const tx=emojiDB.transaction("emojis","readonly");const store=tx.objectStore("emojis");const req=store.getAll();req.onsuccess=()=>{const items=req.result||[];items.sort((a,b)=>a.id.localeCompare(b.id));resolve(items.map(i=>i.data));};req.onerror=e=>reject(e.target.error);});}
+function clearEmojisDB(){return new Promise((resolve,reject)=>{if(!emojiDB){resolve();return;}const tx=emojiDB.transaction("emojis","readwrite");const store=tx.objectStore("emojis");store.clear();tx.oncomplete=()=>resolve();tx.onerror=e=>reject(e.target.error);});}
+let emojiSavePending=false,emojiSaveTimer=null;
+function saveEmojis(){
+  if(!emojiDB){return false;}
+  clearEmojisDB().then(()=>{
+    const tasks=S.ce.map((src,i)=>saveEmojiToDB("e_"+String(i).padStart(5,"0"),src));
+    return Promise.all(tasks);
+  }).then(()=>{
+    try{localStorage.setItem("qnEmojiCount",S.ce.length.toString());}catch(e){}
+  }).catch(e=>{console.warn("保存表情到IndexedDB失败",e);});
+  return true;
+}
 function createDefault(){const id="c_"+Date.now();S.cs.push({id,name:"哥哥",avatar:"",status:"在线",statusList:[...DS],randomStatus:true,cards:[...DC],isGroup:false,members:[],messages:[]});S.cid=id;saveS();}
 function cur(){return S.cs.find(c=>c.id===S.cid);}
-function saveEmojis(){try{localStorage.setItem("qnEmojis",JSON.stringify(S.ce));return true;}catch(e){console.warn("表情保存失败，空间不足",e);return false;}}
 function saveS(){const main={...S};delete main.ce;try{saveEmojis();}catch(e){}try{localStorage.setItem("qnData",JSON.stringify(main));}catch(e){console.warn("保存失败，尝试精简保存",e);try{const lite={...main};lite.cs.forEach(c=>{if(c.messages&&c.messages.length>500)c.messages=c.messages.slice(-500);});lite.moments=(lite.moments||[]).slice(0,50);localStorage.setItem("qnData",JSON.stringify(lite));console.warn("已精简保存（仅保留最近500条消息）");}catch(e2){console.error("精简保存也失败",e2);toast("存储空间不足，数据可能未保存");}}}
-function loadS(){try{const s=JSON.parse(localStorage.getItem("qnData"));if(s&&typeof s==="object"){S={...S,...s};if(!S.cs)S.cs=[];if(!S.me)S.me={name:"我",avatar:"",wxid:"qn_xxxxxx",gender:"保密"};}try{const emojis=JSON.parse(localStorage.getItem("qnEmojis"));if(emojis&&Array.isArray(emojis))S.ce=emojis;}catch(e2){}if(!s){try{const old=JSON.parse(localStorage.getItem("qnFull"));if(old){S={...S,...old};saveS();localStorage.removeItem("qnFull");}}catch(e3){}}}catch(e){console.warn("加载数据失败",e);}}
+function loadS(){
+  let loadedFromOld=false;
+  try{
+    const s=JSON.parse(localStorage.getItem("qnData"));
+    if(s&&typeof s==="object"){S={...S,...s};if(!S.cs)S.cs=[];if(!S.me)S.me={name:"我",avatar:"",wxid:"qn_xxxxxx",gender:"保密"};}
+    try{
+      const emojis=JSON.parse(localStorage.getItem("qnEmojis"));
+      if(emojis&&Array.isArray(emojis)&&emojis.length>0){
+        S.ce=emojis;
+        loadedFromOld=true;
+      }
+    }catch(e2){}
+    if(!s){
+      try{const old=JSON.parse(localStorage.getItem("qnFull"));if(old){S={...S,...old};saveS();localStorage.removeItem("qnFull");}}catch(e3){}
+    }
+  }catch(e){console.warn("加载数据失败",e);}
+  initEmojiDB().then(()=>{
+    loadEmojisFromDB().then(emojis=>{
+      if(emojis&&emojis.length>0){
+        S.ce=emojis;
+      }else if(loadedFromOld&&S.ce.length>0){
+        saveEmojis();
+        try{localStorage.removeItem("qnEmojis");}catch(e){}
+      }
+      renderEmoji();
+      renderStats();
+    }).catch(e=>{console.warn("从IndexedDB加载表情失败",e);renderEmoji();renderStats();});
+  }).catch(e=>{console.warn("IndexedDB初始化失败",e);renderEmoji();renderStats();});
+}
 function applyDK(){if(S.dk)document.body.classList.add("dk");else document.body.classList.remove("dk");if($("darkModeSwitch2"))$("darkModeSwitch2").checked=S.dk;}
 function applyTheme(){const themes=["sakura","ocean","sunset","forest","lavender","midnight","rose","gold","teal","crimson","indigo","amber","cyan","purple","mint","rainbow","coral","sky","neon","paper","mono","sepia"];themes.forEach(t=>document.body.classList.remove("theme-"+t));if(S.theme)document.body.classList.add("theme-"+S.theme);document.querySelectorAll(".theme-card[data-theme]").forEach(c=>c.classList.toggle("on",c.dataset.theme===(S.theme||"")));}
 function applyFont(){const fonts=["sans","serif","xiaowei","kuaile","qingke","longcang","liujian","mashan","zhimang","longyuan"];fonts.forEach(f=>document.body.classList.remove("font-"+f));if(S.font)document.body.classList.add("font-"+S.font);document.querySelectorAll(".theme-card[data-font]").forEach(c=>c.classList.toggle("on",c.dataset.font===(S.font||"")));}
@@ -1083,12 +1127,12 @@ $("setWallpaper").onclick=()=>$("wallpaperFile").click();
 $("wallpaperFile").onchange=e=>handleImg(e,src=>{S.wp=src;$("chatArea").style.backgroundImage=`url(${src})`;saveS();toast("壁纸已更换");});
 $("resetWallpaper").onclick=()=>{S.wp="";$("chatArea").style.backgroundImage="";saveS();toast("已恢复默认");};
 function compressImage(file,maxSize=180,quality=0.85){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=e=>{const img=new Image();img.onload=()=>{let w=img.width,h=img.height;if(w>maxSize||h>maxSize){if(w>h){h=Math.round(h*maxSize/w);w=maxSize;}else{w=Math.round(w*maxSize/h);h=maxSize;}}const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;const ctx=canvas.getContext("2d");ctx.drawImage(img,0,0,w,h);const ext=file.type==="image/png"?"image/png":(file.type==="image/webp"?"image/webp":"image/jpeg");const dataUrl=canvas.toDataURL(ext,quality);resolve(dataUrl);};img.onerror=reject;img.src=e.target.result;};reader.onerror=reject;reader.readAsDataURL(file);});}
-$("emojiFile").onchange=e=>{const files=Array.from(e.target.files);if(!files.length)return;let added=0;let failed=0;const total=files.length;const processNext=async idx=>{if(idx>=files.length){renderEmoji();renderStats();const ok=saveEmojis();if(ok){toast(`已添加${added}个表情${failed>0?`，${failed}个失败`:""}`);}else{toast("存储空间不足，部分表情未保存");}return;}const file=files[idx];try{const compressed=await compressImage(file,180,0.88);S.ce.push(compressed);added++;}catch(err){failed++;console.warn("表情处理失败",err);}processNext(idx+1);};processNext(0);e.target.value="";};
+$("emojiFile").onchange=e=>{const files=Array.from(e.target.files);if(!files.length)return;let added=0;let failed=0;const total=files.length;const processNext=async idx=>{if(idx>=files.length){renderEmoji();renderStats();saveEmojis();toast(`已添加${added}个表情${failed>0?`，${failed}个失败`:""}`);return;}const file=files[idx];try{const compressed=await compressImage(file,200,0.9);S.ce.push(compressed);added++;}catch(err){failed++;console.warn("表情处理失败",err);}processNext(idx+1);};processNext(0);e.target.value="";};
 $("clearChatBtn").onclick=()=>{const c=cur();if(c){c.messages=[];saveS();renderChatList();}$("chatArea").querySelectorAll(".mg,.tp").forEach(m=>m.remove());clearReply();toast("聊天记录已清空");closeSettings();};
 $("exportDataBtn2").onclick=exportData;
 $("importDataBtn2").onclick=()=>$("importDataFile").click();
 $("importDataFile").onchange=importData;
-$("clearAllDataBtn2").onclick=()=>{if(!confirm("确定清空全部数据吗？此操作不可恢复！"))return;localStorage.removeItem("qnData");localStorage.removeItem("qnEmojis");localStorage.removeItem("qnFull");location.reload();};
+$("clearAllDataBtn2").onclick=()=>{if(!confirm("确定清空全部数据吗？此操作不可恢复！"))return;localStorage.removeItem("qnData");localStorage.removeItem("qnEmojis");localStorage.removeItem("qnFull");localStorage.removeItem("qnEmojiCount");clearEmojisDB().then(()=>location.reload()).catch(()=>location.reload());};
 $("openWallet").onclick=()=>{renderWalletLogs();$("walletPage").classList.add("on");};
 $("backWallet").onclick=()=>$("walletPage").classList.remove("on");
 $("editBalance").onclick=()=>{$("balanceInput").value=S.balance;$("balanceModal").classList.add("on");};

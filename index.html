@@ -453,11 +453,12 @@ body.dk .iw{background:#2C2C2C;border-color:#444}
 .jp-text.f-hand{font-family:"Zhi Mang Xing","STCaiyun","华文彩云",cursive}
 .jp-text.f-mono{font-family:"Courier New","Courier",monospace}
 .jp-text.f-deco{font-family:"ZCOOL QingKe HuangYou","STHupo","琥珀体",fantasy}
-.jp-stickers-area{position:relative;min-height:40px;margin-top:12px;padding:4px}
-.jp-sticker-item{position:absolute;max-width:42px;max-height:42px;opacity:.92;pointer-events:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.12))}
-.jp-sticker-item img{max-width:100%;max-height:100%;object-fit:contain}
-.journal-page-single.sticker-edit-mode{overflow:hidden}
-.journal-page-single.sticker-edit-mode .jp-sticker-item{pointer-events:auto;cursor:move;opacity:1;box-shadow:0 0 0 2px rgba(7,193,96,.4);border-radius:4px}
+.jp-stickers-area{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:5}
+.journal-page-single.sticker-edit-mode .jp-stickers-area{pointer-events:auto}
+.jp-sticker-item{position:absolute;width:44px;height:44px;pointer-events:none;touch-action:none;user-select:none;-webkit-user-select:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.12))}
+.jp-sticker-item img{width:100%;height:100%;object-fit:contain;pointer-events:none}
+.journal-page-single.sticker-edit-mode{overflow:hidden;touch-action:none}
+.journal-page-single.sticker-edit-mode .jp-sticker-item{pointer-events:auto;cursor:move;box-shadow:0 0 0 2px rgba(7,193,96,.4);border-radius:4px}
 .journal-page-single.sticker-edit-mode .jp-sticker-item:active{box-shadow:0 0 0 3px rgba(7,193,96,.6);z-index:100}
 .sticker-edit-hint{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);color:#fff;padding:6px 16px;border-radius:20px;font-size:12px;z-index:9999;pointer-events:none;animation:fadeIn .2s ease}
 .jp-comments-section{margin-top:16px;border-top:1px dashed rgba(0,0,0,.1);padding-top:8px}
@@ -1579,7 +1580,7 @@ function onStickerMouseDown(e){if(!stickerEditMode)return;e.preventDefault();sta
 function startStickerDrag(el,cx,cy){stickerDragItem=el;const rect=el.getBoundingClientRect();stickerDragOffX=cx-rect.left;stickerDragOffY=cy-rect.top;document.addEventListener("touchmove",onStickerTouchMove,{passive:false});document.addEventListener("touchend",onStickerTouchEnd);document.addEventListener("mousemove",onStickerMouseMove);document.addEventListener("mouseup",onStickerMouseUp);}
 function onStickerTouchMove(e){if(!stickerDragItem)return;e.preventDefault();const t=e.touches[0];moveSticker(t.clientX,t.clientY);}
 function onStickerMouseMove(e){if(!stickerDragItem)return;moveSticker(e.clientX,e.clientY);}
-function moveSticker(cx,cy){if(!stickerDragItem)return;const area=stickerDragItem.parentElement;if(!area)return;const ar=area.getBoundingClientRect();let x=cx-ar.left-stickerDragOffX;let y=cy-ar.top-stickerDragOffY;x=Math.max(-10,Math.min(x,ar.width-20));y=Math.max(-10,Math.min(y,ar.height-20));let xp=(x/ar.width*100).toFixed(1);let yp=(y/ar.height*100).toFixed(1);stickerDragItem.style.left=xp+"%";stickerDragItem.style.top=yp+"%";}
+function moveSticker(cx,cy){if(!stickerDragItem)return;const page=$("journalPageSingle");if(!page)return;const ar=page.getBoundingClientRect();let x=cx-ar.left-stickerDragOffX;let y=cy-ar.top-stickerDragOffY;x=Math.max(0,Math.min(x,ar.width-44));y=Math.max(0,Math.min(y,ar.height-44));let xp=(x/ar.width*100).toFixed(1);let yp=(y/ar.height*100).toFixed(1);stickerDragItem.style.left=xp+"%";stickerDragItem.style.top=yp+"%";}
 function onStickerTouchEnd(){endStickerDrag();}
 function onStickerMouseUp(){endStickerDrag();}
 function endStickerDrag(){document.removeEventListener("touchmove",onStickerTouchMove);document.removeEventListener("touchend",onStickerTouchEnd);document.removeEventListener("mousemove",onStickerMouseMove);document.removeEventListener("mouseup",onStickerMouseUp);stickerDragItem=null;}

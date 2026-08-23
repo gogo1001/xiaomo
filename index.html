@@ -357,25 +357,266 @@ body.dk .iw{background:#2C2C2C;border-color:#444}
 .call-float-timer{display:none}
 .call-float-hangup{position:absolute;top:-6px;right:-6px;width:22px;height:22px;background:#FF3B30;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;box-shadow:0 2px 6px rgba(0,0,0,.3)}
 .call-float-hangup svg{width:12px;height:12px;stroke:#fff;stroke-width:2;fill:none}
-.moments-page{position:fixed;inset:0;z-index:50;display:none;flex-direction:column;background:var(--bg)}
-.moments-page.on{display:flex}
-.moments-cover{height:220px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);position:relative;flex-shrink:0;background-size:cover;background-position:center}
-.moments-cover-edit{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.4);color:#fff;padding:6px 12px;border-radius:16px;font-size:12px;cursor:pointer;backdrop-filter:blur(4px)}
-.moments-cover-info{position:absolute;bottom:10px;right:16px;display:flex;align-items:center;gap:10px;color:#fff}
-.moments-cover-name{font-size:16px;font-weight:500;text-shadow:0 1px 3px rgba(0,0,0,.3)}
-.moments-cover-avatar{width:50px;height:50px;border-radius:6px;background:#ddd;overflow:hidden;border:2px solid rgba(255,255,255,.5)}
-.moments-cover-avatar img{width:100%;height:100%;object-fit:cover}
-.moments-list{flex:1;overflow-y:auto;background:var(--lbg)}
-.moments-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;color:var(--t2)}
-.moments-empty-icon{font-size:48px;margin-bottom:16px;opacity:.3}
-.moments-empty-text{font-size:14px}
-.moment-item{display:flex;gap:10px;padding:14px 16px;border-bottom:.5px solid var(--bd)}
-.moment-avatar{width:40px;height:40px;border-radius:6px;background:#ddd;flex-shrink:0;overflow:hidden}
-.moment-avatar img{width:100%;height:100%;object-fit:cover}
-.moment-content{flex:1;min-width:0}
-.moment-name{font-size:14px;color:#576b95;font-weight:500;margin-bottom:4px}
-.moment-text{font-size:14px;line-height:1.5;margin-bottom:6px;word-break:break-word}
-.moment-time{font-size:11px;color:var(--t2);display:flex;align-items:center;gap:10px}
+/* 手账本 - 翻页式日记本 */
+.journal-page{position:fixed;inset:0;z-index:50;display:none;flex-direction:column;background:#e8e6e1}
+.journal-page.on{display:flex}
+.journal-page.jt-default{background:#e8e6e1}
+.journal-page.jt-warm{background:#fdf6e3}
+.journal-page.jt-cool{background:#e0f2f1}
+.journal-page.jt-pink{background:#fce4ec}
+.journal-page.jt-dark{background:#2c3e50}
+.journal-page.jt-kraft{background:#e6d5ac}
+.journal-page.jt-purple{background:#f3e5f5}
+.journal-header{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 8px;flex-shrink:0;border-bottom:1px solid rgba(0,0,0,.06);background:rgba(255,255,255,.85);backdrop-filter:blur(8px)}
+.journal-page.jt-dark .journal-header{background:rgba(45,52,64,.9);border-bottom-color:rgba(255,255,255,.1)}
+.journal-page.jt-dark .jh-btn{color:#74b9ff}
+.journal-page.jt-dark .jh-title{color:#ecf0f1}
+.journal-page.jt-dark .jh-font-select{background:rgba(255,255,255,.1);color:#ecf0f1;border-color:rgba(255,255,255,.2)}
+.jh-left,.jh-right{display:flex;align-items:center;gap:4px}
+.jh-btn{background:none;border:none;font-size:13px;color:#576b95;cursor:pointer;padding:6px 8px;border-radius:6px;font-family:inherit}
+.jh-btn:active{background:rgba(0,0,0,.06)}
+.jh-title{font-size:16px;font-weight:600;color:#333}
+.jh-font-select{font-size:11px;border:1px solid #ccc;border-radius:6px;padding:3px 6px;background:#fff;color:#333;font-family:inherit;max-width:76px}
+.journal-book-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.journal-book{flex:1;display:flex;align-items:center;justify-content:center;padding:8px;position:relative}
+/* 单页翻页式 - 线圈在最左边 */
+.journal-spread{width:100%;max-width:500px;height:100%;max-height:580px;display:flex;position:relative;overflow:hidden;border-radius:6px;box-shadow:0 2px 16px rgba(0,0,0,.12)}
+/* 线圈装订在最左边 */
+.journal-binding{width:24px;flex-shrink:0;position:relative;z-index:10;background:linear-gradient(to right,#b8b8b8 0%,#e0e0e0 40%,#c0c0c0 60%,#d0d0d0 100%);box-shadow:2px 0 8px rgba(0,0,0,.1)}
+.journal-binding::before{content:"";position:absolute;inset:0;background-image:repeating-linear-gradient(to bottom,transparent 0 16px,#888 16px 19px,transparent 19px 34px);border-radius:2px}
+.journal-binding::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(0,0,0,.15);transform:translateX(-50%)}
+.journal-page.jt-dark .journal-binding{background:linear-gradient(to right,#4a5568 0%,#718096 40%,#4a5568 60%,#5a6578 100%)}
+.journal-page.jt-dark .journal-binding::before{background-image:repeating-linear-gradient(to bottom,transparent 0 16px,#2d3748 16px 19px,transparent 19px 34px)}
+/* 单页内容 */
+.journal-page-single{flex:1;position:relative;overflow-y:auto;overflow-x:hidden;transition:opacity .25s ease,transform .25s ease}
+.journal-page-single.flip-next{animation:jFlipNext .3s ease}
+.journal-page-single.flip-prev{animation:jFlipPrev .3s ease}
+@keyframes jFlipNext{0%{opacity:0;transform:translateX(40px)}100%{opacity:1;transform:translateX(0)}}
+@keyframes jFlipPrev{0%{opacity:0;transform:translateX(-40px)}100%{opacity:1;transform:translateX(0)}}
+.jp-inner{min-height:100%;padding:20px 20px 20px 16px;position:relative}
+/* 封面 */
+.journal-cover{width:100%;max-width:500px;height:100%;max-height:580px;display:flex;flex-direction:column;position:relative;overflow:hidden;border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,.18);cursor:pointer;transition:transform .2s}
+.journal-cover:active{transform:scale(.98)}
+.journal-cover-bg{position:absolute;inset:0;background-size:cover;background-position:center;z-index:0}
+.journal-cover-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(255,255,255,.25) 0%,rgba(255,255,255,.05) 50%,rgba(0,0,0,.15) 100%)}
+.journal-cover-content{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;z-index:2;padding:32px 24px;text-align:center}
+.journal-cover-title{font-size:28px;font-weight:700;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.4);margin-bottom:8px;letter-spacing:2px;line-height:1.4}
+.journal-cover-subtitle{font-size:14px;color:rgba(255,255,255,.85);text-shadow:0 1px 6px rgba(0,0,0,.3);margin-bottom:24px;letter-spacing:1px}
+.journal-cover-divider{width:40px;height:2px;background:rgba(255,255,255,.5);margin:12px auto;border-radius:2px}
+.journal-cover-date{font-size:13px;color:rgba(255,255,255,.75);text-shadow:0 1px 4px rgba(0,0,0,.3);margin-top:8px}
+.journal-cover-open-btn{margin-top:32px;padding:8px 28px;background:rgba(255,255,255,.2);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.4);border-radius:24px;color:#fff;font-size:14px;cursor:pointer;letter-spacing:2px;transition:all .2s}
+.journal-cover-open-btn:active{background:rgba(255,255,255,.3);transform:scale(.96)}
+.journal-cover-placeholder{width:100%;max-width:500px;height:100%;max-height:580px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#e8e6e1 0%,#d4c9b8 50%,#c8b890 100%);border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,.18);cursor:pointer;transition:transform .2s;position:relative;overflow:hidden}
+.journal-cover-placeholder:active{transform:scale(.98)}
+.journal-cover-placeholder-icon{font-size:48px;margin-bottom:16px;opacity:.4}
+.journal-cover-placeholder-text{font-size:22px;color:#8b7355;font-weight:600;letter-spacing:3px;margin-bottom:6px}
+.journal-cover-placeholder-sub{font-size:13px;color:#a09880;letter-spacing:1px}
+/* 封面编辑弹窗 */
+.journal-cover-edit-modal .md{max-height:90vh;overflow-y:auto}
+.jce-preview{width:100%;height:200px;border-radius:8px;overflow:hidden;margin-bottom:12px;position:relative;border:1px solid var(--bd);background:#eee;display:flex;align-items:center;justify-content:center}
+.jce-preview-bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.jce-preview-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.25) 0%,rgba(255,255,255,.05) 50%,rgba(0,0,0,.15) 100%)}
+.jce-preview-content{position:relative;z-index:2;text-align:center}
+.jce-preview-title{font-size:22px;font-weight:700;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.4);margin-bottom:4px}
+.jce-preview-sub{font-size:12px;color:rgba(255,255,255,.8);text-shadow:0 1px 4px rgba(0,0,0,.3)}
+.jce-input{width:100%;box-sizing:border-box;border:1px solid var(--bd);background:var(--mbg);color:var(--t1);border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;margin-bottom:8px}
+.jce-btn-row{display:flex;gap:8px;margin-bottom:8px}
+.jce-btn{flex:1;padding:8px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--mbg);color:var(--t1);font-size:13px;cursor:pointer;text-align:center}
+.jce-btn:active{background:var(--sgbg)}
+.jce-colors{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.jce-color-btn{width:32px;height:32px;border-radius:50%;cursor:pointer;border:2px solid transparent;flex-shrink:0;transition:transform .15s}
+.jce-color-btn:active{transform:scale(.9)}
+.jce-color-btn.active{border-color:var(--green);transform:scale(1.1)}
+/* 空状态 */
+.journal-empty-full{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#999}
+.journal-empty-full-icon{font-size:56px;margin-bottom:16px;opacity:.3}
+.journal-empty-full-text{font-size:15px;color:#aaa}
+/* 内页内容 */
+.jp-top-bar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.jp-date-block{text-align:left}
+.jp-date-year{font-size:12px;color:#999;margin-bottom:2px}
+.jp-date-big{font-size:32px;font-weight:700;color:#333;line-height:1.1}
+.jp-date-weekday{font-size:12px;color:#aaa;margin-top:2px}
+.jp-mood{font-size:24px}
+.jp-divider{border-top:1px dashed rgba(0,0,0,.1);margin:12px 0}
+.jp-content{min-height:120px}
+.jp-text{font-size:15px;line-height:1.9;color:#2d3436;white-space:pre-wrap;word-break:break-word;text-align:left}
+.jp-text.f-serif{font-family:"Noto Serif SC","STSong","SimSun",serif}
+.jp-text.f-kai{font-family:"Ma Shan Zheng","STKaiti","KaiTi",cursive,serif}
+.jp-text.f-song{font-family:"Noto Serif SC","STSong","SimSun","宋体",serif}
+.jp-text.f-fangsong{font-family:"ZCOOL XiaoWei","STFangsong","仿宋",serif}
+.jp-text.f-hei{font-family:"Noto Sans SC","STHeiti","SimHei","黑体",sans-serif}
+.jp-text.f-yuan{font-family:"ZCOOL KuaiLe","STYuanti","YouYuan",cursive,sans-serif}
+.jp-text.f-li{font-family:"ZCOOL QingKe HuangYou","STLiti","Lisu",serif}
+.jp-text.f-hua{font-family:"Long Cang","STHuaShi","华文行楷",cursive}
+.jp-text.f-hand{font-family:"Zhi Mang Xing","STCaiyun","华文彩云",cursive}
+.jp-text.f-mono{font-family:"Courier New","Courier",monospace}
+.jp-text.f-deco{font-family:"ZCOOL QingKe HuangYou","STHupo","琥珀体",fantasy}
+.jp-stickers-area{position:relative;min-height:40px;margin-top:12px;padding:4px}
+.jp-sticker-item{position:absolute;max-width:42px;max-height:42px;opacity:.92;pointer-events:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.12))}
+.jp-sticker-item img{max-width:100%;max-height:100%;object-fit:contain}
+.jp-comments-section{margin-top:16px;border-top:1px dashed rgba(0,0,0,.1);padding-top:8px}
+.jp-comment{display:flex;gap:6px;padding:4px 0}
+.jp-comment-av{width:22px;height:22px;border-radius:4px;flex-shrink:0;overflow:hidden;background:#ddd}
+.jp-comment-av img{width:100%;height:100%;object-fit:cover}
+.jp-comment-body{flex:1;min-width:0}
+.jp-comment-name{font-size:11px;color:#576b95;font-weight:500}
+.jp-comment-text{font-size:12px;color:#555;line-height:1.4;word-break:break-word}
+.jp-comment-time{font-size:10px;color:#bbb}
+.jp-comment-pending{font-size:11px;color:#bbb;text-align:center;padding:4px 0;font-style:italic}
+.jp-font-label{text-align:right;font-size:9px;color:#ccc;margin-top:8px}
+/* 内页风格 */
+.jp-inner-lined{background:#fff;background-image:repeating-linear-gradient(transparent,transparent 28px,#d8dee9 29px)}
+.jp-inner-blank{background:#fff}
+.jp-inner-grid{background:#fff;background-image:linear-gradient(#eee 1px,transparent 1px),linear-gradient(90deg,#eee 1px,transparent 1px);background-size:24px 24px}
+.jp-inner-dot{background:#fff;background-image:radial-gradient(#ccc 1px,transparent 1px);background-size:24px 24px}
+.jp-inner-cream{background:#fdf6e3}
+.jp-inner-cream-lined{background:#fdf6e3;background-image:repeating-linear-gradient(transparent,transparent 28px,#d4c9a0 29px)}
+.jp-inner-mint{background:#e8f5e9}
+.jp-inner-rose{background:#fce4ec}
+.jp-inner-sky{background:#e3f2fd}
+.jp-inner-kraft{background:#f5e6c8;background-image:repeating-linear-gradient(transparent,transparent 28px,#d4b896 29px)}
+.journal-page.jt-dark .jp-inner-lined{background:#2c3e50;background-image:repeating-linear-gradient(transparent,transparent 28px,#3d4f6a 29px)}
+.journal-page.jt-dark .jp-inner-blank{background:#2c3e50}
+.journal-page.jt-dark .jp-inner-grid{background:#2c3e50;background-image:linear-gradient(#3d4f6a 1px,transparent 1px),linear-gradient(90deg,#3d4f6a 1px,transparent 1px);background-size:24px 24px}
+.journal-page.jt-dark .jp-inner-dot{background:#2c3e50;background-image:radial-gradient(#3d4f6a 1px,transparent 1px);background-size:24px 24px}
+.journal-page.jt-dark .jp-inner-cream{background:#3a3a3a}
+.journal-page.jt-dark .jp-inner-cream-lined{background:#3a3a3a;background-image:repeating-linear-gradient(transparent,transparent 28px,#555 29px)}
+.journal-page.jt-dark .jp-inner-mint{background:#1a3635}
+.journal-page.jt-dark .jp-inner-rose{background:#3d2535}
+.journal-page.jt-dark .jp-inner-sky{background:#1a2a3d}
+.journal-page.jt-dark .jp-inner-kraft{background:#3d3525;background-image:repeating-linear-gradient(transparent,transparent 28px,#4d4535 29px)}
+.journal-page.jt-dark .jp-date-year,.journal-page.jt-dark .jp-date-weekday{color:#8899aa}
+.journal-page.jt-dark .jp-date-big{color:#ecf0f1}
+.journal-page.jt-dark .jp-text{color:#ecf0f1}
+.journal-page.jt-dark .jp-divider{border-top-color:rgba(255,255,255,.1)}
+.journal-page.jt-dark .jp-comment-name{color:#74b9ff}
+.journal-page.jt-dark .jp-comment-text{color:#bdc3c7}
+/* 暖色主题 */
+.journal-page.jt-warm .journal-header{background:rgba(253,246,227,.92)}
+.journal-page.jt-warm .journal-binding{background:linear-gradient(to right,#c9a96e 0%,#e8d4a0 40%,#c9a96e 60%,#d4b878 100%)}
+.journal-page.jt-warm .journal-binding::before{background-image:repeating-linear-gradient(to bottom,transparent 0 16px,#a08040 16px 19px,transparent 19px 34px)}
+.journal-page.jt-warm .jp-inner-lined{background:#fdf6e3;background-image:repeating-linear-gradient(transparent,transparent 28px,#d4c9a0 29px)}
+.journal-page.jt-warm .jp-inner-blank{background:#fdf6e3}
+.journal-page.jt-warm .jp-inner-cream{background:#f5ead0}
+.journal-page.jt-warm .jp-inner-cream-lined{background:#f5ead0;background-image:repeating-linear-gradient(transparent,transparent 28px,#c9b880 29px)}
+.journal-page.jt-warm .jp-inner-kraft{background:#f0e0b0;background-image:repeating-linear-gradient(transparent,transparent 28px,#d4b896 29px)}
+.journal-page.jt-warm .jp-date-big{color:#8b6914}
+.journal-page.jt-warm .jp-text{color:#5d4e1a}
+.journal-page.jt-warm .jp-divider{border-top-color:rgba(139,105,20,.15)}
+.journal-page.jt-warm .jn-btn{background:#fdf6e3;border-color:#d4c9a0;color:#8b6914}
+/* 清凉主题 */
+.journal-page.jt-cool .journal-header{background:rgba(224,242,241,.92)}
+.journal-page.jt-cool .journal-binding{background:linear-gradient(to right,#4a9b8e 0%,#7fcbbf 40%,#4a9b8e 60%,#5ab0a3 100%)}
+.journal-page.jt-cool .journal-binding::before{background-image:repeating-linear-gradient(to bottom,transparent 0 16px,#2d8275 16px 19px,transparent 19px 34px)}
+.journal-page.jt-cool .jp-inner-lined{background:#e0f2f1;background-image:repeating-linear-gradient(transparent,transparent 28px,#a3d4cf 29px)}
+.journal-page.jt-cool .jp-inner-blank{background:#e0f2f1}
+.journal-page.jt-cool .jp-inner-mint{background:#c8e6c9}
+.journal-page.jt-cool .jp-inner-sky{background:#b3e5fc}
+.journal-page.jt-cool .jp-date-big{color:#00695c}
+.journal-page.jt-cool .jp-text{color:#004d40}
+.journal-page.jt-cool .jp-divider{border-top-color:rgba(0,105,92,.15)}
+.journal-page.jt-cool .jn-btn{background:#e0f2f1;border-color:#a3d4cf;color:#00695c}
+/* 粉色主题 */
+.journal-page.jt-pink .journal-header{background:rgba(252,228,236,.92)}
+.journal-page.jt-pink .journal-binding{background:linear-gradient(to right,#e091a8 0%,#f4b8c8 40%,#e091a8 60%,#e8a0b5 100%)}
+.journal-page.jt-pink .journal-binding::before{background-image:repeating-linear-gradient(to bottom,transparent 0 16px,#c06080 16px 19px,transparent 19px 34px)}
+.journal-page.jt-pink .jp-inner-lined{background:#fce4ec;background-image:repeating-linear-gradient(transparent,transparent 28px,#f0b0c8 29px)}
+.journal-page.jt-pink .jp-inner-blank{background:#fce4ec}
+.journal-page.jt-pink .jp-inner-rose{background:#f8bbd0}
+.journal-page.jt-pink .jp-inner-cream{background:#fce4ec}
+.journal-page.jt-pink .jp-inner-cream-lined{background:#fce4ec;background-image:repeating-linear-gradient(transparent,transparent 28px,#f0b0c8 29px)}
+.journal-page.jt-pink .jp-date-big{color:#ad1457}
+.journal-page.jt-pink .jp-text{color:#880e4f}
+.journal-page.jt-pink .jp-divider{border-top-color:rgba(173,20,87,.15)}
+.journal-page.jt-pink .jn-btn{background:#fce4ec;border-color:#f0b0c8;color:#ad1457}
+/* 牛皮主题 */
+.journal-page.jt-kraft .journal-header{background:rgba(230,213,172,.92)}
+.journal-page.jt-kraft .journal-binding{background:linear-gradient(to right,#8b7355 0%,#b8a078 40%,#8b7355 60%,#a08858 100%)}
+.journal-page.jt-kraft .journal-binding::before{background-image:repeating-linear-gradient(to bottom,transparent 0 16px,#6b5340 16px 19px,transparent 19px 34px)}
+.journal-page.jt-kraft .jp-inner-lined{background:#e6d5ac;background-image:repeating-linear-gradient(transparent,transparent 28px,#c4a868 29px)}
+.journal-page.jt-kraft .jp-inner-blank{background:#e6d5ac}
+.journal-page.jt-kraft .jp-inner-cream{background:#e6d5ac}
+.journal-page.jt-kraft .jp-inner-cream-lined{background:#e6d5ac;background-image:repeating-linear-gradient(transparent,transparent 28px,#c4a868 29px)}
+.journal-page.jt-kraft .jp-inner-kraft{background:#d4b896;background-image:repeating-linear-gradient(transparent,transparent 28px,#b89868 29px)}
+.journal-page.jt-kraft .jp-date-big{color:#5d4037}
+.journal-page.jt-kraft .jp-text{color:#4e342e}
+.journal-page.jt-kraft .jp-divider{border-top-color:rgba(93,64,55,.15)}
+.journal-page.jt-kraft .jn-btn{background:#e6d5ac;border-color:#c4a868;color:#5d4037}
+/* 紫色主题 */
+.journal-page.jt-purple .journal-header{background:rgba(243,229,245,.92)}
+.journal-page.jt-purple .journal-binding{background:linear-gradient(to right,#9b6bb0 0%,#c4a0d4 40%,#9b6bb0 60%,#ab7bc0 100%)}
+.journal-page.jt-purple .journal-binding::before{background-image:repeating-linear-gradient(to bottom,transparent 0 16px,#7b4b90 16px 19px,transparent 19px 34px)}
+.journal-page.jt-purple .jp-inner-lined{background:#f3e5f5;background-image:repeating-linear-gradient(transparent,transparent 28px,#d0a3e0 29px)}
+.journal-page.jt-purple .jp-inner-blank{background:#f3e5f5}
+.journal-page.jt-purple .jp-inner-rose{background:#e1bee7}
+.journal-page.jt-purple .jp-inner-cream{background:#f3e5f5}
+.journal-page.jt-purple .jp-inner-cream-lined{background:#f3e5f5;background-image:repeating-linear-gradient(transparent,transparent 28px,#d0a3e0 29px)}
+.journal-page.jt-purple .jp-date-big{color:#6a1b9a}
+.journal-page.jt-purple .jp-text{color:#4a148c}
+.journal-page.jt-purple .jp-divider{border-top-color:rgba(106,27,154,.15)}
+.journal-page.jt-purple .jn-btn{background:#f3e5f5;border-color:#d0a3e0;color:#6a1b9a}
+/* 翻页控制 */
+.journal-nav{display:flex;align-items:center;justify-content:center;gap:20px;padding:6px 0 10px;flex-shrink:0}
+.jn-btn{width:36px;height:36px;border-radius:50%;border:1px solid #ccc;background:#fff;color:#666;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.1);transition:all .15s}
+.jn-btn:active{transform:scale(.92);background:#f5f5f5}
+.jn-btn:disabled{opacity:.3;cursor:default}
+.journal-page.jt-dark .jn-btn{background:#34495e;color:#ecf0f1;border-color:#4a6572}
+.journal-page.jt-dark .jn-btn:active{background:#2c3e50}
+.jn-info{font-size:12px;color:#888;min-width:72px;text-align:center}
+.journal-page.jt-dark .jn-info{color:#95a5a6}
+/* 写手账弹窗 */
+.journal-write-modal .md{max-height:90vh;overflow-y:auto}
+.jw-label{font-size:12px;color:var(--t2);margin-bottom:4px;font-weight:500}
+.jw-page-styles{display:flex;gap:6px;overflow-x:auto;padding:4px 0 12px}
+.jw-ps-btn{padding:5px 10px;border:1px solid var(--bd);border-radius:14px;font-size:11px;color:var(--t2);cursor:pointer;white-space:nowrap;flex-shrink:0;background:var(--mbg);font-family:inherit}
+.jw-ps-btn.active{background:var(--green);color:#fff;border-color:var(--green)}
+.jw-font-styles{display:flex;gap:6px;overflow-x:auto;padding:4px 0 12px}
+.jw-fs-btn{padding:5px 10px;border:1px solid var(--bd);border-radius:14px;font-size:12px;color:var(--t2);cursor:pointer;white-space:nowrap;flex-shrink:0;background:var(--mbg)}
+.jw-fs-btn.active{background:var(--green);color:#fff;border-color:var(--green)}
+.jw-fs-btn.f-serif{font-family:"Noto Serif SC",serif}
+.jw-fs-btn.f-kai{font-family:"Ma Shan Zheng",cursive}
+.jw-fs-btn.f-song{font-family:"Noto Serif SC",serif}
+.jw-fs-btn.f-fangsong{font-family:"ZCOOL XiaoWei",serif}
+.jw-fs-btn.f-hei{font-family:"Noto Sans SC",sans-serif}
+.jw-fs-btn.f-yuan{font-family:"ZCOOL KuaiLe",cursive}
+.jw-fs-btn.f-li{font-family:"ZCOOL QingKe HuangYou",serif}
+.jw-fs-btn.f-hua{font-family:"Long Cang",cursive}
+.jw-fs-btn.f-hand{font-family:"Zhi Mang Xing",cursive}
+.jw-fs-btn.f-mono{font-family:"Courier New",monospace}
+.jw-fs-btn.f-deco{font-family:"ZCOOL QingKe HuangYou",fantasy}
+.jw-text-area{margin:8px 0}
+.jw-text-area textarea{width:100%;box-sizing:border-box;border:1px solid var(--bd);background:var(--mbg);color:var(--t1);border-radius:8px;padding:12px;font-size:15px;font-family:inherit;min-height:100px;resize:vertical;line-height:1.6}
+.jw-mood-row{display:flex;gap:6px;align-items:center;padding:4px 0}
+.jw-mood-btn{font-size:22px;cursor:pointer;opacity:.5;transition:opacity .15s}
+.jw-mood-btn.active{opacity:1}
+/* 贴纸库 */
+.jw-sticker-section{margin-top:12px}
+.jw-sticker-grid{display:flex;flex-wrap:wrap;gap:8px;max-height:140px;overflow-y:auto;padding:4px;border:1px solid var(--bd);border-radius:8px;background:var(--mbg)}
+.jw-sticker-item{position:relative;width:44px;height:44px}
+.jw-sticker-item img{width:100%;height:100%;object-fit:contain;cursor:pointer;transition:transform .15s}
+.jw-sticker-item img:active{transform:scale(1.15)}
+.jw-sticker-del{position:absolute;top:-4px;right:-4px;width:14px;height:14px;background:#FF6B6B;color:#fff;border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2}
+.jw-add-sticker{width:44px;height:44px;border:1px dashed var(--bd);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--t2);cursor:pointer;flex-shrink:0}
+.jw-sticker-preview{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;min-height:20px}
+.jw-sticker-preview-item{position:relative}
+.jw-sticker-preview-item img{max-width:36px;max-height:36px;object-fit:contain}
+.jw-sticker-preview-del{position:absolute;top:-3px;right:-3px;width:12px;height:12px;background:#FF6B6B;color:#fff;border-radius:50%;font-size:8px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.jw-sticker-preview-empty{font-size:11px;color:var(--t2);padding:4px 0}
+/* 主题选择 */
+.jw-theme-row{display:flex;gap:6px;overflow-x:auto;padding:4px 0 8px}
+.jw-theme-btn{width:40px;height:40px;border-radius:10px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;transition:transform .15s;position:relative}
+.jw-theme-btn:active{transform:scale(.92)}
+.jw-theme-btn.active::after{content:"✓";position:absolute;bottom:-2px;right:-2px;width:14px;height:14px;background:var(--green);color:#fff;border-radius:50%;font-size:8px;display:flex;align-items:center;justify-content:center}
+.jw-theme-btn[data-theme="default"]{background:#e8e6e1}
+.jw-theme-btn[data-theme="warm"]{background:#fdf6e3}
+.jw-theme-btn[data-theme="cool"]{background:#e0f2f1}
+.jw-theme-btn[data-theme="pink"]{background:#fce4ec}
+.jw-theme-btn[data-theme="dark"]{background:#2c3e50}
+.jw-theme-btn[data-theme="kraft"]{background:#e6d5ac}
+.jw-theme-btn[data-theme="purple"]{background:#f3e5f5}
+.jw-btns{display:flex;gap:8px;margin-top:12px}
+.jw-btns button{flex:1}
 .profile-edit-page{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;background:var(--bg)}
 .profile-edit-page.on{display:flex}
 .pe-header{height:44px;background:var(--hdr);border-bottom:.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 12px;flex-shrink:0}
@@ -572,7 +813,7 @@ body.dk .iw{background:#2C2C2C;border-color:#444}
 <div class="pg discover-page" id="discoverPage">
 <div class="nb"><div class="nt">发现</div></div>
 <div style="flex:1;overflow-y:auto;">
-<div class="dl"><div class="di" id="openMoments"><div class="dic"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div><div class="dit">朋友圈</div><div class="dia">›</div></div>
+<div class="dl"><div class="di" id="openJournal"><div class="dic"><svg class="ic" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="dit">手账本</div><div class="dia">›</div></div>
 <div class="di" id="openGame"><div class="dic"><svg class="ic" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="11" r="1"/><circle cx="18" cy="13" r="1"/></svg></div><div class="dit">小游戏</div><div class="dia">›</div></div></div>
 <div class="dl"><div class="di" id="openCallLog"><div class="dic"><svg class="ic" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div class="dit">通话记录</div><div class="dia">›</div></div>
 <div class="di" id="openMusicPlayer"><div class="dic"><svg class="ic" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="dit">听音乐</div><div class="dia">›</div></div></div>
@@ -845,21 +1086,114 @@ body.dk .iw{background:#2C2C2C;border-color:#444}
 <div class="call-float-timer" id="callFloatTimer">00:00</div>
 </div>
 
-<div class="moments-page" id="momentsPage">
-<div class="nb" style="background:var(--hdr);"><div class="nl"><span class="nbk" id="backMoments">‹</span></div><div class="nt">朋友圈</div><div class="nr" id="postMomentBtn" style="cursor:pointer;"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
-<div class="moments-cover" id="momentsCover">
-<div class="moments-cover-edit" id="editMomentsCover">更换封面</div>
-<div class="moments-cover-info">
-<div class="moments-cover-name" id="momentsMyName">我</div>
-<div class="moments-cover-avatar" id="momentsMyAvatar"></div>
+<div class="journal-page" id="journalPage">
+<div class="journal-header">
+<div class="jh-left"><button class="jh-btn" id="backJournal">‹ 返回</button><button class="jh-btn" id="journalCoverBtn">封面</button><button class="jh-btn" id="backupJournalBtn">备份</button><button class="jh-btn" id="importJournalBtn">导入</button></div>
+<div class="jh-title">手账本</div>
+<div class="jh-right"><select class="jh-font-select" id="journalFontSelect"><option value="">默认</option><option value="f-serif">衬线</option><option value="f-kai">楷体</option><option value="f-song">宋体</option><option value="f-fangsong">小薇</option><option value="f-hei">黑体</option><option value="f-yuan">快乐</option><option value="f-li">黄油</option><option value="f-hua">行楷</option><option value="f-hand">手写</option><option value="f-mono">打字机</option><option value="f-deco">琥珀</option></select><button class="jh-btn" id="writeJournalBtn">写</button></div>
+</div>
+<div class="journal-book-wrap">
+<div class="journal-book" id="journalBook">
+<div class="journal-cover-placeholder" id="journalCoverPlaceholder" style="display:none;"><div class="journal-cover-placeholder-icon">📔</div><div class="journal-cover-placeholder-text">我的手账</div><div class="journal-cover-placeholder-sub">点击设置封面</div></div>
+<div class="journal-cover" id="journalCoverView" style="display:none;"><div class="journal-cover-bg" id="journalCoverBg"></div><div class="journal-cover-overlay"></div><div class="journal-cover-content"><div class="journal-cover-title" id="journalCoverTitle">我的手账本</div><div class="journal-cover-subtitle" id="journalCoverSubtitle">记录每一个瞬间</div><div class="journal-cover-divider"></div><div class="journal-cover-date" id="journalCoverDate"></div><div class="journal-cover-open-btn" id="journalCoverOpenBtn">打开手账</div></div></div>
+<div class="journal-empty-full" id="journalEmptyFull" style="display:none;"><div class="journal-empty-full-icon">📔</div><div class="journal-empty-full-text">还没有写手账，点击右上角「写」开始吧</div></div>
+<div class="journal-spread" id="journalSpread" style="display:none;">
+<div class="journal-binding"></div>
+<div class="journal-page-single" id="journalPageSingle"></div>
 </div>
 </div>
-<div class="moments-list" id="momentsList">
-<div class="moments-empty" id="momentsEmpty"><div class="moments-empty-icon">📷</div><div class="moments-empty-text">还没有发布朋友圈</div></div>
+<div class="journal-nav" id="journalNav" style="display:none;">
+<button class="jn-btn" id="journalPrevBtn">‹</button>
+<span class="jn-info" id="journalPageInfo">0 / 0</span>
+<button class="jn-btn" id="journalNextBtn">›</button>
+<button class="jn-btn" id="journalDeleteBtn" style="color:#FF6B6B;font-size:13px;width:auto;padding:0 10px;border-radius:20px;">删</button>
+<button class="jn-btn" id="journalCoverBackBtn" style="font-size:13px;width:auto;padding:0 10px;border-radius:20px;display:none;">封面</button>
+</div>
 </div>
 </div>
 
-<div class="mk" id="momentModal"><div class="md"><div class="mh">发布朋友圈</div><div class="mb"><textarea class="minp" id="momentText" placeholder="说点什么..." style="height:100px;resize:none;"></textarea></div><div class="mf"><button class="mbtn cc" data-close="momentModal">取消</button><button class="mbtn cf" id="confirmMoment">发布</button></div></div></div>
+<div class="mk journal-write-modal" id="journalWriteModal"><div class="md"><div class="mh">写手账</div><div class="mb">
+<div style="font-size:12px;color:var(--t2);margin-bottom:4px;">内页风格</div>
+<div class="jw-page-styles" id="jwPageStyles">
+<button class="jw-ps-btn active" data-ps="lined">横线</button>
+<button class="jw-ps-btn" data-ps="blank">空白</button>
+<button class="jw-ps-btn" data-ps="grid">方格</button>
+<button class="jw-ps-btn" data-ps="dot">点阵</button>
+<button class="jw-ps-btn" data-ps="cream">米色</button>
+<button class="jw-ps-btn" data-ps="cream-lined">米色横线</button>
+<button class="jw-ps-btn" data-ps="mint">薄荷</button>
+<button class="jw-ps-btn" data-ps="rose">玫粉</button>
+<button class="jw-ps-btn" data-ps="sky">天蓝</button>
+<button class="jw-ps-btn" data-ps="kraft">牛皮</button>
+</div>
+<div style="font-size:12px;color:var(--t2);margin-bottom:4px;">字体风格</div>
+<div class="jw-font-styles" id="jwFontStyles">
+<button class="jw-fs-btn active" data-fs="">默认</button>
+<button class="jw-fs-btn f-serif" data-fs="f-serif">Georgia</button>
+<button class="jw-fs-btn f-kai" data-fs="f-kai">楷体</button>
+<button class="jw-fs-btn f-song" data-fs="f-song">宋体</button>
+<button class="jw-fs-btn f-fangsong" data-fs="f-fangsong">仿宋</button>
+<button class="jw-fs-btn f-hei" data-fs="f-hei">黑体</button>
+<button class="jw-fs-btn f-yuan" data-fs="f-yuan">幼圆</button>
+<button class="jw-fs-btn f-li" data-fs="f-li">隶书</button>
+<button class="jw-fs-btn f-hua" data-fs="f-hua">行楷</button>
+<button class="jw-fs-btn f-hand" data-fs="f-hand">手写体</button>
+<button class="jw-fs-btn f-mono" data-fs="f-mono">打字机</button>
+<button class="jw-fs-btn f-deco" data-fs="f-deco">琥珀体</button>
+</div>
+<div class="jw-label">主题</div>
+<div class="jw-theme-row" id="jwThemeRow">
+<div class="jw-theme-btn active" data-theme="default" title="默认">📋</div>
+<div class="jw-theme-btn" data-theme="warm" title="暖色">☀️</div>
+<div class="jw-theme-btn" data-theme="cool" title="清凉">🌿</div>
+<div class="jw-theme-btn" data-theme="pink" title="粉色">🌸</div>
+<div class="jw-theme-btn" data-theme="dark" title="暗色">🌙</div>
+<div class="jw-theme-btn" data-theme="kraft" title="牛皮">📜</div>
+<div class="jw-theme-btn" data-theme="purple" title="紫色">💜</div>
+</div>
+<div class="jw-label">心情</div>
+<div class="jw-mood-row" id="jwMoodRow">
+<span class="jw-mood-btn active" data-mood="😊">😊</span>
+<span class="jw-mood-btn" data-mood="😌">😌</span>
+<span class="jw-mood-btn" data-mood="😢">😢</span>
+<span class="jw-mood-btn" data-mood="😡">😡</span>
+<span class="jw-mood-btn" data-mood="🥰">🥰</span>
+<span class="jw-mood-btn" data-mood="😴">😴</span>
+<span class="jw-mood-btn" data-mood="🤔">🤔</span>
+<span class="jw-mood-btn" data-mood="🥳">🥳</span>
+</div>
+<div class="jw-text-area"><textarea id="jwText" placeholder="写下今天的心情..." maxlength="500"></textarea></div>
+<div class="jw-sticker-section">
+<div class="jw-label">贴纸库（上传后永久保存，点击添加到本页）</div>
+<div class="jw-sticker-grid" id="jwStickerGrid"></div>
+<div class="jw-label" style="margin-top:8px;">本页贴纸</div>
+<div class="jw-sticker-preview" id="jwStickerPreview"></div>
+</div>
+</div><div class="mf jw-btns"><button class="mbtn cc" data-close="journalWriteModal">取消</button><button class="mbtn cf" id="confirmJournal">保存</button></div></div></div>
+<input type="file" class="hf" id="journalStickerFile" accept="image/png,image/gif,image/webp,image/jpeg,image/*">
+<input type="file" class="hf" id="journalBackupFile" accept=".json">
+<input type="file" class="hf" id="journalCoverBgFile" accept="image/*">
+<div class="mk journal-cover-edit-modal" id="journalCoverEditModal"><div class="md"><div class="mh">编辑封面</div><div class="mb">
+<div class="jce-preview" id="jcePreview"><div class="jce-preview-bg" id="jcePreviewBg"></div><div class="jce-preview-overlay"></div><div class="jce-preview-content"><div class="jce-preview-title" id="jcePreviewTitle">我的手账本</div><div class="jce-preview-sub" id="jcePreviewSub">记录每一个瞬间</div></div></div>
+<div class="jce-btn-row"><button class="jce-btn" id="jceUploadBgBtn">上传背景图</button><button class="jce-btn" id="jceRemoveBgBtn" style="color:#FF6B6B;">移除背景</button></div>
+<div class="jw-label">标题</div>
+<input type="text" class="jce-input" id="jceTitleInput" placeholder="手账标题" maxlength="20" value="我的手账本">
+<div class="jw-label">副标题</div>
+<input type="text" class="jce-input" id="jceSubInput" placeholder="副标题" maxlength="30" value="记录每一个瞬间">
+<div class="jw-label">背景颜色（无背景图时生效）</div>
+<div class="jce-colors" id="jceColors">
+<div class="jce-color-btn active" data-color="#e8e6e1" style="background:linear-gradient(135deg,#e8e6e1,#d4c9b8)"></div>
+<div class="jce-color-btn" data-color="#fdf6e3" style="background:linear-gradient(135deg,#fdf6e3,#e8d4a0)"></div>
+<div class="jce-color-btn" data-color="#e0f2f1" style="background:linear-gradient(135deg,#e0f2f1,#a3d4cf)"></div>
+<div class="jce-color-btn" data-color="#fce4ec" style="background:linear-gradient(135deg,#fce4ec,#f0b0c8)"></div>
+<div class="jce-color-btn" data-color="#2c3e50" style="background:linear-gradient(135deg,#2c3e50,#4a6572)"></div>
+<div class="jce-color-btn" data-color="#e6d5ac" style="background:linear-gradient(135deg,#e6d5ac,#c4a868)"></div>
+<div class="jce-color-btn" data-color="#f3e5f5" style="background:linear-gradient(135deg,#f3e5f5,#d0a3e0)"></div>
+<div class="jce-color-btn" data-color="#1a237e" style="background:linear-gradient(135deg,#1a237e,#3949ab)"></div>
+<div class="jce-color-btn" data-color="#b71c1c" style="background:linear-gradient(135deg,#b71c1c,#d32f2f)"></div>
+<div class="jce-color-btn" data-color="#1b5e20" style="background:linear-gradient(135deg,#1b5e20,#2e7d32)"></div>
+</div>
+</div><div class="mf"><button class="mbtn cc" data-close="journalCoverEditModal">取消</button><button class="mbtn cf" id="jceSaveBtn">保存</button></div></div></div>
 <div class="mk" id="addContactModal"><div class="md"><div class="mh">添加联系人</div><div class="mb"><input type="text" class="minp" id="newContactName" placeholder="联系人昵称"><div style="text-align:center;margin-bottom:12px;"><button class="mbtn cf" style="width:auto;padding:8px 16px;border:1px solid #07C160;border-radius:6px;" id="uploadContactAvatarBtn">上传头像</button></div></div><div class="mf"><button class="mbtn cc" data-close="addContactModal">取消</button><button class="mbtn cf" id="confirmAddContact">添加</button></div></div></div>
 <div class="mk" id="createGroupModal"><div class="md"><div class="mh">发起群聊</div><div class="mb"><input type="text" class="minp" id="newGroupName" placeholder="群聊名称"><div class="csl" id="groupSelectList"></div></div><div class="mf"><button class="mbtn cc" data-close="createGroupModal">取消</button><button class="mbtn cf" id="confirmCreateGroup">创建</button></div></div></div>
 <div class="mk" id="locationModal"><div class="md"><div class="mh">发送位置</div><div class="mb"><input type="text" class="minp" id="locationName" placeholder="位置名称" value="位置"><input type="text" class="minp" id="locationAddr" placeholder="详细地址" value=""></div><div class="mf"><button class="mbtn cc" data-close="locationModal">取消</button><button class="mbtn cf" id="confirmSendLocation">发送</button></div></div></div>
@@ -880,18 +1214,17 @@ body.dk .iw{background:#2C2C2C;border-color:#444}
 <input type="file" class="hf" id="newContactAvatarFile" accept="image/*">
 <input type="file" class="hf" id="importDataFile" accept=".json,application/json">
 <input type="file" class="hf" id="importCardsFile" accept=".json,.txt,text/plain,application/json">
-<input type="file" class="hf" id="momentsCoverFile" accept="image/*">
 <div class="tst" id="toast"></div>
 
 <script>
 const DC=["嗯","好的","收到","哈哈哈","可以呀","我看看","你说","不急","好嘞","明白","现在吗？","晚点吧","我想想","还行","挺好的","确实","同意","我也觉得","那也行","随便你","都可以","看你","我都行","先这样","再说吧","别慌","慢慢来","我在呢","怎么了？","出什么事了？","你还好吗？","我陪你","别想太多","早点休息","晚安啦","早安","吃饭了吗？","在干嘛？","忙不忙？","累不累？","多喝水","少熬夜","注意身体","路上小心","到了说一声","我等你","我马上到","快了快了","还没弄完","正在弄","稍等一下","我先看看","你先忙","我不着急","你先弄","我后面回你","看到了","收到收到","好的好的","没问题","安排","交给我","我来处理","别担心","有我呢","真的假的？","不会吧","这么巧？","我也刚到","我也在想这个","你说得对","我再确认一下","可能吧","应该是","不确定","我问问","我查一下","晚点跟你说","回头聊","我先忙了","有空再说","今天不行","明天可以","周末再说","我看看时间","应该可以","可能不行","我尽量","辛苦啦","谢谢啦","麻烦你了","没事没事","不客气","应该的","别客气","哈哈哈哈","我笑了","有点意思","真的吗","你决定就好"];
 const DS=["在线","忙碌中","离开","请勿打扰","离线","手机在线","WiFi在线"];
 const DE=["😀","😂","🥰","😘","🤔","😅","😭","😡","👍","👎","❤️","🎉","🔥","💪","🙏","😊"];
-let S={dk:false,theme:"",font:"",me:{name:"我",avatar:"",wxid:"qn_xxxxxx",gender:"保密"},balance:"128.50",walletLogs:[],momentsCover:"",moments:[],wp:"",rcMin:1,rcMax:2,riMin:1000,riMax:3000,grcMin:1,grcMax:3,autoReply:false,autoReplyMin:5,autoReplyMax:30,disableEmoji:false,ce:[],cid:null,cs:[],callLogs:[],music:{playlist:[],currentIdx:-1,cover:"",playing:false,playMode:"list"},mailbox:{letters:[]}};
+let S={dk:false,theme:"",font:"",me:{name:"我",avatar:"",wxid:"qn_xxxxxx",gender:"保密"},balance:"128.50",walletLogs:[],momentsCover:"",moments:[],journal:{entries:[],cover:"",coverTitle:"我的手账本",coverSub:"记录每一个瞬间",coverBg:"",coverColor:"#e8e6e1",stickers:[],pageStyle:"lined",theme:"default"},wp:"",rcMin:1,rcMax:2,riMin:1000,riMax:3000,grcMin:1,grcMax:3,autoReply:false,autoReplyMin:5,autoReplyMax:30,disableEmoji:false,ce:[],cid:null,cs:[],callLogs:[],music:{playlist:[],currentIdx:-1,cover:"",playing:false,playMode:"list"},mailbox:{letters:[]}};
 let tmpAvatar="",selMembers=[],statusTimer=null,replyTimers=[],pendingTimers=[],callTimer=null,callSeconds=0,callMuted=false,callSpeakerOn=false,callType="voice",typingContacts=new Set();
 const $=id=>document.getElementById(id);
-function init(){try{loadS();fixFields();applyDK();applyTheme();applyFont();checkLostMusicFiles();if(!S.cs||S.cs.length===0)createDefault();if(!S.cid||!S.cs.find(c=>c.id===S.cid))S.cid=S.cs[0].id;renderAll();$("timeDivider").textContent=fmtTime();bindEvents();startStatusRandom();restoreMailboxTimers();if(S.autoReply)startAutoReply();}catch(e){console.error("初始化失败",e);}setTimeout(()=>{const ls=$("loadingScreen");if(ls){ls.classList.add("hide");setTimeout(()=>{ls.style.display="none";},600);}},800);}
-function fixFields(){if(!S.me.wxid)S.me.wxid="qn_xxxxxx";if(!S.me.gender)S.me.gender="保密";if(!S.balance)S.balance="128.50";if(!S.momentsCover)S.momentsCover="";if(!S.moments)S.moments=[];if(S.theme==null)S.theme="";if(S.font==null)S.font="";const oldFonts=["rounded","kai","song","hei","fangsong","lishu","youyuan","dengxian","xingkai","weibei","hupo","caiyun"];if(oldFonts.includes(S.font))S.font="";if(S.rc!=null&&S.rcMin==null){S.rcMin=1;S.rcMax=S.rc;}if(S.ri!=null&&S.riMin==null){S.riMin=Math.max(1000,S.ri-1000);S.riMax=S.ri;}if(S.rcMin==null)S.rcMin=1;if(S.rcMax==null)S.rcMax=2;if(S.riMin==null)S.riMin=1000;if(S.riMax==null)S.riMax=3000;if(S.grcMin==null)S.grcMin=1;if(S.grcMax==null)S.grcMax=3;if(S.autoReply==null)S.autoReply=false;if(S.autoReplyMin==null)S.autoReplyMin=5;if(S.autoReplyMax==null)S.autoReplyMax=30;S.rcMax=Math.min(8,S.rcMax);S.rcMin=Math.min(S.rcMin,S.rcMax);S.riMax=Math.min(600000,S.riMax);S.riMin=Math.min(S.riMin,S.riMax);S.grcMax=Math.min(8,S.grcMax);S.grcMin=Math.min(S.grcMin,S.grcMax);if(!S.callLogs)S.callLogs=[];if(!S.walletLogs)S.walletLogs=[];if(!S.music)S.music={playlist:[],currentIdx:-1,cover:"",playing:false,playMode:"list"};if(!S.music.playlist)S.music.playlist=[];if(!S.music.playMode)S.music.playMode="list";if(!S.mailbox)S.mailbox={letters:[]};if(!S.mailbox.letters)S.mailbox.letters=[];S.cs.forEach(c=>{if(!c.messages)c.messages=[];if(c.unread==null)c.unread=0;});}
+function init(){try{loadS();fixFields();applyDK();applyTheme();applyFont();checkLostMusicFiles();if(!S.cs||S.cs.length===0)createDefault();if(!S.cid||!S.cs.find(c=>c.id===S.cid))S.cid=S.cs[0].id;renderAll();$("timeDivider").textContent=fmtTime();bindEvents();startStatusRandom();restoreMailboxTimers();restoreJournalComments();if(S.autoReply)startAutoReply();}catch(e){console.error("初始化失败",e);}setTimeout(()=>{const ls=$("loadingScreen");if(ls){ls.classList.add("hide");setTimeout(()=>{ls.style.display="none";},600);}},800);}
+function fixFields(){if(!S.me.wxid)S.me.wxid="qn_xxxxxx";if(!S.me.gender)S.me.gender="保密";if(!S.balance)S.balance="128.50";if(!S.momentsCover)S.momentsCover="";if(!S.moments)S.moments=[];if(S.theme==null)S.theme="";if(S.font==null)S.font="";const oldFonts=["rounded","kai","song","hei","fangsong","lishu","youyuan","dengxian","xingkai","weibei","hupo","caiyun"];if(oldFonts.includes(S.font))S.font="";if(S.rc!=null&&S.rcMin==null){S.rcMin=1;S.rcMax=S.rc;}if(S.ri!=null&&S.riMin==null){S.riMin=Math.max(1000,S.ri-1000);S.riMax=S.ri;}if(S.rcMin==null)S.rcMin=1;if(S.rcMax==null)S.rcMax=2;if(S.riMin==null)S.riMin=1000;if(S.riMax==null)S.riMax=3000;if(S.grcMin==null)S.grcMin=1;if(S.grcMax==null)S.grcMax=3;if(S.autoReply==null)S.autoReply=false;if(S.autoReplyMin==null)S.autoReplyMin=5;if(S.autoReplyMax==null)S.autoReplyMax=30;S.rcMax=Math.min(8,S.rcMax);S.rcMin=Math.min(S.rcMin,S.rcMax);S.riMax=Math.min(600000,S.riMax);S.riMin=Math.min(S.riMin,S.riMax);S.grcMax=Math.min(8,S.grcMax);S.grcMin=Math.min(S.grcMin,S.grcMax);if(!S.callLogs)S.callLogs=[];if(!S.walletLogs)S.walletLogs=[];if(!S.music)S.music={playlist:[],currentIdx:-1,cover:"",playing:false,playMode:"list"};if(!S.music.playlist)S.music.playlist=[];if(!S.music.playMode)S.music.playMode="list";if(!S.mailbox)S.mailbox={letters:[]};if(!S.mailbox.letters)S.mailbox.letters=[];if(!S.journal)S.journal={entries:[],cover:"",coverTitle:"我的手账本",coverSub:"记录每一个瞬间",coverBg:"",coverColor:"#e8e6e1",stickers:[],pageStyle:"lined",theme:"default"};if(!S.journal.entries)S.journal.entries=[];if(!S.journal.stickers)S.journal.stickers=[];if(!S.journal.pageStyle)S.journal.pageStyle="lined";if(!S.journal.coverTitle)S.journal.coverTitle="我的手账本";if(!S.journal.coverSub)S.journal.coverSub="记录每一个瞬间";if(!S.journal.coverColor)S.journal.coverColor="#e8e6e1";if(!S.journal.theme)S.journal.theme="default";S.cs.forEach(c=>{if(!c.messages)c.messages=[];if(c.unread==null)c.unread=0;});}
 let appDB=null;
 function initDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open("qnDB",2);req.onupgradeneeded=e=>{const db=e.target.result;if(!db.objectStoreNames.contains("emojis"))db.createObjectStore("emojis",{keyPath:"id"});if(!db.objectStoreNames.contains("messages"))db.createObjectStore("messages",{keyPath:"cid"});if(!db.objectStoreNames.contains("assets"))db.createObjectStore("assets",{keyPath:"key"});if(!db.objectStoreNames.contains("musicFiles"))db.createObjectStore("musicFiles",{keyPath:"id"});};req.onsuccess=e=>{appDB=e.target.result;resolve(appDB);};req.onerror=e=>reject(e.target.error);});}
 function dbPut(storeName,data){return new Promise((resolve,reject)=>{if(!appDB){reject("DB not ready");return;}const tx=appDB.transaction(storeName,"readwrite");const store=tx.objectStore(storeName);store.put(data);tx.oncomplete=()=>resolve();tx.onerror=e=>reject(e.target.error);});}
@@ -935,6 +1268,7 @@ function saveS(){
   if(S.me&&S.me.avatar){saveAsset("meAvatar",S.me.avatar);main.me={...main.me};delete main.me.avatar;}
   if(S.moments&&S.moments.length>0){saveAsset("moments",S.moments);delete main.moments;}
   if(S.music&&S.music.cover){saveAsset("musicCover",S.music.cover);main.music={...main.music};delete main.music.cover;}
+  if(S.journal&&(S.journal.entries&&S.journal.entries.length>0||S.journal.cover||S.journal.coverBg||(S.journal.stickers&&S.journal.stickers.length>0))){saveAsset("journal",S.journal);delete main.journal;}
   if(S.walletLogs&&S.walletLogs.length>200){saveAsset("walletLogs",S.walletLogs);main.walletLogs=S.walletLogs.slice(0,50);}
   if(S.callLogs&&S.callLogs.length>200){saveAsset("callLogs",S.callLogs);main.callLogs=S.callLogs.slice(0,50);}
   /* 联系人消息和头像存IndexedDB */
@@ -952,7 +1286,7 @@ function loadS(){
   let oldData=null,oldEmojis=null;
   try{
     const s=JSON.parse(localStorage.getItem("qnData"));
-    if(s&&typeof s==="object"){oldData=s;S={...S,...s};if(!S.cs)S.cs=[];if(!S.me)S.me={name:"我",avatar:"",wxid:"qn_xxxxxx",gender:"保密"};if(!S.moments)S.moments=[];if(!S.wp)S.wp="";if(!S.momentsCover)S.momentsCover="";}
+    if(s&&typeof s==="object"){oldData=s;S={...S,...s};if(!S.cs)S.cs=[];if(!S.me)S.me={name:"我",avatar:"",wxid:"qn_xxxxxx",gender:"保密"};if(!S.moments)S.moments=[];if(!S.wp)S.wp="";if(!S.momentsCover)S.momentsCover="";if(!S.journal)S.journal={entries:[],cover:"",stickers:[],pageStyle:"lined"};if(!S.journal.entries)S.journal.entries=[];if(!S.journal.stickers)S.journal.stickers=[];if(!S.journal.pageStyle)S.journal.pageStyle="lined";}
     try{
       const emojis=JSON.parse(localStorage.getItem("qnEmojis"));
       if(emojis&&Array.isArray(emojis)&&emojis.length>0)oldEmojis=emojis;
@@ -983,6 +1317,7 @@ function loadS(){
     tasks.push(loadAsset("meAvatar").then(v=>{if(v)S.me.avatar=v;}).catch(()=>{}));
     tasks.push(loadAsset("moments").then(v=>{if(v&&Array.isArray(v))S.moments=v;}).catch(()=>{}));
     tasks.push(loadAsset("musicCover").then(v=>{if(v&&S.music)S.music.cover=v;}).catch(()=>{}));
+    tasks.push(loadAsset("journal").then(v=>{if(v&&typeof v==="object"){S.journal=v;if(!S.journal.entries)S.journal.entries=[];if(!S.journal.stickers)S.journal.stickers=[];if(!S.journal.pageStyle)S.journal.pageStyle="lined";if(!S.journal.coverTitle)S.journal.coverTitle="我的手账本";if(!S.journal.coverSub)S.journal.coverSub="记录每一个瞬间";if(!S.journal.coverColor)S.journal.coverColor="#e8e6e1";if(!S.journal.theme)S.journal.theme="default";}}).catch(()=>{}));
     /* 加载本地音乐文件，重建blob URL */
     tasks.push(loadAllMusicFiles().then(fileMap=>{
       if(S.music&&S.music.playlist){
@@ -1017,7 +1352,7 @@ function applyDK(){if(S.dk)document.body.classList.add("dk");else document.body.
 function applyTheme(){const themes=["sakura","ocean","sunset","forest","lavender","midnight","rose","gold","teal","crimson","indigo","amber","cyan","purple","mint","rainbow","coral","sky","neon","paper","mono","sepia"];themes.forEach(t=>document.body.classList.remove("theme-"+t));if(S.theme)document.body.classList.add("theme-"+S.theme);document.querySelectorAll(".theme-card[data-theme]").forEach(c=>c.classList.toggle("on",c.dataset.theme===(S.theme||"")));}
 function applyFont(){const fonts=["sans","serif","xiaowei","kuaile","qingke","longcang","liujian","mashan","zhimang","longyuan"];fonts.forEach(f=>document.body.classList.remove("font-"+f));if(S.font)document.body.classList.add("font-"+S.font);document.querySelectorAll(".theme-card[data-font]").forEach(c=>c.classList.toggle("on",c.dataset.font===(S.font||"")));}
 function switchPg(id){document.querySelectorAll(".pg").forEach(p=>p.classList.remove("on"));$(id).classList.add("on");document.querySelectorAll(".ti").forEach(t=>t.classList.toggle("on",t.dataset.pg===id));closePanels();}
-function renderAll(){renderChatList();renderContacts();renderChatHeader();renderSettings();renderEmoji();renderMy();renderBalance();renderMoments();renderStats();}
+function renderAll(){renderChatList();renderContacts();renderChatHeader();renderSettings();renderEmoji();renderMy();renderBalance();renderJournal();renderStats();}
 function renderBalance(){$("balanceAmount").textContent="¥ "+S.balance;}
 function renderMy(){$("myNameBig").textContent=S.me.name;$("myWxidBig").textContent="ID："+(S.me.wxid||"未设置");$("chatListTitle").textContent=S.me.name;const a=$("myAvatarBig");if(S.me.avatar){a.innerHTML=`<img src="${S.me.avatar}">`;}else{a.innerHTML=`<svg class="ic icl" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;}}
 function renderChatList(){$("chatList").innerHTML="";S.cs.forEach(c=>{const d=document.createElement("div");d.className="ci";const ah=c.avatar?`<img src="${c.avatar}">`:(c.isGroup?"👥":"👤");let preview="发个消息聊聊吧~";let time=fmtTime();if(c.messages&&c.messages.length>0){const last=c.messages[c.messages.length-1];preview=getMsgPreview(last);time=last.time;}const badge=(c.unread&&c.unread>0)?`<div class="ci-badge">${c.unread>99?"99+":c.unread}</div>`:"";d.innerHTML=`<div class="cia">${ah}</div>${badge}<div class="cii"><div class="cin">${c.name}</div><div class="cim">${preview}</div></div><div class="cit">${time}</div>`;d.onclick=()=>enterChat(c.id);$("chatList").appendChild(d);});}
@@ -1194,7 +1529,43 @@ function dedupeCards(){
 }
 function renderEmoji(){$("emojiGrid").innerHTML="";if(!S.disableEmoji){DE.forEach(e=>{const d=document.createElement("div");d.className="ei2";d.textContent=e;d.onclick=()=>sendEmoji(e,false);$("emojiGrid").appendChild(d);});}S.ce.forEach((src,idx)=>{const d=document.createElement("div");d.className="ei2";d.style.position="relative";d.innerHTML=`<img src="${src}"><span class="edel" data-i="${idx}">×</span>`;d.onclick=e=>{if(e.target.classList.contains("edel")){e.stopPropagation();const i=parseInt(e.target.dataset.i);S.ce.splice(i,1);saveS();renderEmoji();renderStats();toast("已删除表情");}else{sendEmoji(src,true);}};$("emojiGrid").appendChild(d);});const a=document.createElement("div");a.className="ei2 ea";a.textContent="+";a.onclick=()=>$("emojiFile").click();$("emojiGrid").appendChild(a);}
 function renderStats(){const tc=S.cs.reduce((s,c)=>s+c.cards.length,0);$("statContacts2").textContent=S.cs.length;$("statCards2").textContent=tc;$("statEmojis2").textContent=S.ce.length;}
-function renderMoments(){$("momentsMyName").textContent=S.me.name;const ma=$("momentsMyAvatar");if(S.me.avatar)ma.innerHTML=`<img src="${S.me.avatar}">`;else ma.innerHTML="👤";const mc=$("momentsCover");if(S.momentsCover){mc.style.backgroundImage=`url(${S.momentsCover})`;mc.style.backgroundSize="cover";mc.style.backgroundPosition="center";}else{mc.style.backgroundImage="";mc.style.background="linear-gradient(135deg,#667eea 0%,#764ba2 100%)";}const list=$("momentsList");if(S.moments.length===0){list.innerHTML=`<div class="moments-empty"><div class="moments-empty-icon">📷</div><div class="moments-empty-text">还没有发布朋友圈</div></div>`;return;}list.innerHTML="";S.moments.forEach(m=>{const d=document.createElement("div");d.className="moment-item";const ah=S.me.avatar?`<img src="${S.me.avatar}">`:"👤";d.innerHTML=`<div class="moment-avatar">${ah}</div><div class="moment-content"><div class="moment-name">${S.me.name}</div><div class="moment-text">${m.text}</div><div class="moment-time">${m.time}</div></div>`;list.appendChild(d);});}
+/* ========== 手账本 ========== */
+let jwPageStyle="lined",jwFontStyle="",jwMood="😊",jwSelectedStickers=[],journalIdx=0,jwTheme="default",journalShowCover=true,jceCoverBg="",jceCoverColor="#e8e6e1";
+const JOURNAL_FONTS=[{v:"",n:"默认"},{v:"f-serif",n:"Georgia"},{v:"f-kai",n:"楷体"},{v:"f-song",n:"宋体"},{v:"f-fangsong",n:"仿宋"},{v:"f-hei",n:"黑体"},{v:"f-yuan",n:"幼圆"},{v:"f-li",n:"隶书"},{v:"f-hua",n:"行楷"},{v:"f-hand",n:"手写体"},{v:"f-mono",n:"打字机"},{v:"f-deco",n:"琥珀体"}];
+const JOURNAL_INNER_STYLES={lined:"jp-inner-lined",blank:"jp-inner-blank",grid:"jp-inner-grid",dot:"jp-inner-dot",cream:"jp-inner-cream","cream-lined":"jp-inner-cream-lined",mint:"jp-inner-mint",rose:"jp-inner-rose",sky:"jp-inner-sky",kraft:"jp-inner-kraft"};
+function getJournalInnerClass(ps){return JOURNAL_INNER_STYLES[ps]||JOURNAL_INNER_STYLES["lined"];}
+function getFontName(fv){const f=JOURNAL_FONTS.find(x=>x.v===fv);return f?f.n:"默认";}
+function getWeekday(date){const d=new Date(date);const days=["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];return days[d.getDay()];}
+function getDateParts(date){const d=new Date(date);return{year:d.getFullYear(),month:d.getMonth()+1,day:d.getDate(),weekday:getWeekday(date)};}
+function renderJournal(){const entries=S.journal.entries||[];const spread=$("journalSpread");const emptyFull=$("journalEmptyFull");const nav=$("journalNav");const coverView=$("journalCoverView");const coverPlaceholder=$("journalCoverPlaceholder");const coverBackBtn=$("journalCoverBackBtn");if(journalShowCover){if(entries.length>0){showJournalCover();spread.style.display="none";emptyFull.style.display="none";nav.style.display="none";coverBackBtn.style.display="none";}else{showJournalCover();spread.style.display="none";emptyFull.style.display="none";nav.style.display="none";coverBackBtn.style.display="none";}return;}if(entries.length===0){coverView.style.display="none";coverPlaceholder.style.display="none";spread.style.display="none";emptyFull.style.display="flex";nav.style.display="none";coverBackBtn.style.display="none";applyJournalTheme(S.journal.theme||"default");return;}coverView.style.display="none";coverPlaceholder.style.display="none";spread.style.display="flex";emptyFull.style.display="none";nav.style.display="flex";coverBackBtn.style.display="";if(journalIdx>=entries.length)journalIdx=entries.length-1;if(journalIdx<0)journalIdx=0;const cur=entries[journalIdx];applyJournalTheme(cur.theme||S.journal.theme||"default");renderJournalPage();updateJournalNav();$("journalFontSelect").value=cur.fontStyle||"";}
+function showJournalCover(){const coverView=$("journalCoverView");const coverPlaceholder=$("journalCoverPlaceholder");const j=S.journal;if(j.coverBg||j.coverTitle||j.coverSub){coverView.style.display="flex";coverPlaceholder.style.display="none";const bgEl=$("journalCoverBg");if(j.coverBg){bgEl.style.backgroundImage=`url(${j.coverBg})`;}else{bgEl.style.background=j.coverColor||"#e8e6e1";}$("journalCoverTitle").textContent=j.coverTitle||"我的手账本";$("journalCoverSubtitle").textContent=j.coverSub||"";const entries=j.entries||[];$("journalCoverDate").textContent=entries.length>0?`共 ${entries.length} 篇手账`:"还没有手账";}else{coverView.style.display="none";coverPlaceholder.style.display="flex";}}
+function applyJournalTheme(theme){const jp=$("journalPage");if(!jp)return;const themes=["default","warm","cool","pink","dark","kraft","purple"];themes.forEach(t=>jp.classList.remove("jt-"+t));jp.classList.add("jt-"+(theme||"default"));}
+function renderJournalPage(){const entries=S.journal.entries||[];if(entries.length===0)return;const e=entries[journalIdx];if(!e)return;const dp=getDateParts(e.time);const innerClass=getJournalInnerClass(e.pageStyle);const fontClass=e.fontStyle||"";const fontName=getFontName(e.fontStyle);const mood=e.mood||"😊";const stickersHtml=(e.stickers||[]).map(s=>`<div class="jp-sticker-item" style="left:${s.x||10}%;top:${s.y||10}%;"><img src="${s.src}"></div>`).join("");let commentsHtml="";if(e.comments&&e.comments.length>0){commentsHtml=`<div class="jp-comments-section">${e.comments.map(c=>`<div class="jp-comment"><div class="jp-comment-av">${c.avatar?`<img src="${c.avatar}">`:"👤"}</div><div class="jp-comment-body"><span class="jp-comment-name">${c.from}</span><div class="jp-comment-text">${c.text}</div><div class="jp-comment-time">${c.time}</div></div></div>`).join("")}</div>`;}else if(e.commentPending){commentsHtml=`<div class="jp-comments-section"><div class="jp-comment-pending">等待留言中...</div></div>`;}
+const page=$("journalPageSingle");
+page.className="journal-page-single "+innerClass;
+page.innerHTML=`<div class="jp-inner"><div class="jp-top-bar"><div class="jp-date-block"><div class="jp-date-year">${dp.year}年${dp.month}月</div><div class="jp-date-big">${dp.day}</div><div class="jp-date-weekday">${dp.weekday}</div></div><div class="jp-mood">${mood}</div></div><div class="jp-divider"></div><div class="jp-content"><div class="jp-text ${fontClass}">${e.text?e.text.replace(/\n/g,"<br>"):"<span style='color:#ccc'>（空白页）</span>"}</div></div><div class="jp-stickers-area">${stickersHtml}</div>${commentsHtml}<div class="jp-font-label">${fontName}</div></div>`;
+page.scrollTop=0;}
+function updateJournalNav(){const entries=S.journal.entries||[];$("journalPageInfo").textContent=`${journalIdx+1} / ${entries.length}`;$("journalPrevBtn").disabled=journalIdx<=0;$("journalNextBtn").disabled=journalIdx>=entries.length-1;}
+function journalPrev(){if(journalIdx<=0)return;const page=$("journalPageSingle");page.classList.add("flip-prev");setTimeout(()=>{journalIdx--;const e=(S.journal.entries||[])[journalIdx];if(e&&e.theme)applyJournalTheme(e.theme);renderJournalPage();page.classList.remove("flip-prev");updateJournalNav();$("journalFontSelect").value=e?e.fontStyle||"":"";},280);}
+function journalNext(){const entries=S.journal.entries||[];if(journalIdx>=entries.length-1)return;const page=$("journalPageSingle");page.classList.add("flip-next");setTimeout(()=>{journalIdx++;const e=entries[journalIdx];if(e&&e.theme)applyJournalTheme(e.theme);renderJournalPage();page.classList.remove("flip-next");updateJournalNav();$("journalFontSelect").value=e?e.fontStyle||"":"";},280);}
+function journalDelete(){const entries=S.journal.entries||[];if(entries.length===0)return;if(!confirm("确定删除这一页手账吗？"))return;S.journal.entries.splice(journalIdx,1);if(journalIdx>=S.journal.entries.length)journalIdx=Math.max(0,S.journal.entries.length-1);saveS();renderJournal();toast("已删除");}
+function openCoverEditor(){jceCoverBg=S.journal.coverBg||"";jceCoverColor=S.journal.coverColor||"#e8e6e1";$("jceTitleInput").value=S.journal.coverTitle||"我的手账本";$("jceSubInput").value=S.journal.coverSub||"记录每一个瞬间";updateCoverPreview();updateJceColors();$("journalCoverEditModal").classList.add("on");}
+function updateCoverPreview(){const bgEl=$("jcePreviewBg");if(jceCoverBg){bgEl.style.backgroundImage=`url(${jceCoverBg})`;bgEl.style.background="";}else{bgEl.style.backgroundImage="";bgEl.style.background=jceCoverColor;}$("jcePreviewTitle").textContent=$("jceTitleInput").value||"我的手账本";$("jcePreviewSub").textContent=$("jceSubInput").value||"";}
+function updateJceColors(){$("jceColors").querySelectorAll(".jce-color-btn").forEach(b=>{b.classList.toggle("active",b.dataset.color===jceCoverColor);});}
+function saveCover(){S.journal.coverTitle=$("jceTitleInput").value.trim()||"我的手账本";S.journal.coverSub=$("jceSubInput").value.trim()||"";S.journal.coverBg=jceCoverBg;S.journal.coverColor=jceCoverColor;saveS();$("journalCoverEditModal").classList.remove("on");renderJournal();toast("封面已保存");}
+function openJournalWrite(){$("jwText").value="";jwPageStyle=S.journal.pageStyle||"lined";jwFontStyle="";jwMood="😊";jwTheme=S.journal.theme||"default";jwSelectedStickers=[];updateJwPageStyles();updateJwFontStyles();updateJwMood();updateJwThemeRow();updateJwStickerGrid();updateJwStickerPreview();$("journalWriteModal").classList.add("on");}
+function updateJwPageStyles(){$("jwPageStyles").querySelectorAll(".jw-ps-btn").forEach(b=>{b.classList.toggle("active",b.dataset.ps===jwPageStyle);});}
+function updateJwFontStyles(){$("jwFontStyles").querySelectorAll(".jw-fs-btn").forEach(b=>{b.classList.toggle("active",b.dataset.fs===jwFontStyle);});}
+function updateJwMood(){$("jwMoodRow").querySelectorAll(".jw-mood-btn").forEach(b=>{b.classList.toggle("active",b.dataset.mood===jwMood);});}
+function updateJwThemeRow(){$("jwThemeRow").querySelectorAll(".jw-theme-btn").forEach(b=>{b.classList.toggle("active",b.dataset.theme===jwTheme);});}
+function updateJwStickerGrid(){const grid=$("jwStickerGrid");grid.innerHTML="";const addBtn=document.createElement("div");addBtn.className="jw-add-sticker";addBtn.textContent="+";addBtn.onclick=()=>$("journalStickerFile").click();grid.appendChild(addBtn);(S.journal.stickers||[]).forEach((s,i)=>{const d=document.createElement("div");d.className="jw-sticker-item";d.innerHTML=`<img src="${s}"><span class="jw-sticker-del" data-i="${i}">×</span>`;d.querySelector("img").onclick=()=>{jwSelectedStickers.push({src:s,x:Math.random()*70+5,y:Math.random()*70+5});updateJwStickerPreview();};d.querySelector(".jw-sticker-del").onclick=(e)=>{e.stopPropagation();S.journal.stickers.splice(i,1);saveS();updateJwStickerGrid();};grid.insertBefore(d,addBtn);});}
+function updateJwStickerPreview(){const pv=$("jwStickerPreview");pv.innerHTML="";jwSelectedStickers.forEach((s,i)=>{const d=document.createElement("div");d.className="jw-sticker-preview-item";d.innerHTML=`<img src="${s.src}"><span class="jw-sticker-preview-del" data-i="${i}">×</span>`;d.querySelector(".jw-sticker-preview-del").onclick=()=>{jwSelectedStickers.splice(i,1);updateJwStickerPreview();};pv.appendChild(d);});}
+function saveJournalEntry(){const text=$("jwText").value.trim();if(!text){toast("请写点内容");return;}const entry={id:"jrn"+Date.now(),text,time:Date.now(),timeStr:fmtTime(),pageStyle:jwPageStyle,fontStyle:jwFontStyle,mood:jwMood,theme:jwTheme,stickers:[...jwSelectedStickers],comments:[],commentPending:true};S.journal.entries.unshift(entry);S.journal.pageStyle=jwPageStyle;S.journal.theme=jwTheme;saveS();$("journalWriteModal").classList.remove("on");journalIdx=0;applyJournalTheme(jwTheme);renderJournal();toast("手账已保存，1小时后会有留言");const delay=60*60*1000;const t=setTimeout(()=>addJournalComment(entry.id),delay);entry.commentTimer=t;}
+function addJournalComment(entryId){const e=S.journal.entries.find(x=>x.id===entryId);if(!e)return;e.commentPending=false;const contacts=S.cs.filter(c=>!c.isGroup&&c.cards&&c.cards.length>=4);if(contacts.length===0){saveS();renderJournal();return;}const commenter=contacts[Math.floor(Math.random()*contacts.length)];const cardCount=Math.min(4+Math.floor(Math.random()*5),commenter.cards.length);const pool=[...commenter.cards];const picked=[];for(let i=0;i<cardCount;i++){const idx=Math.floor(Math.random()*pool.length);picked.push(pool.splice(idx,1)[0]);}const comment={id:"jc"+Date.now(),from:commenter.name,avatar:commenter.avatar||"",text:picked.join(""),time:fmtTime()};e.comments=e.comments||[];e.comments.push(comment);saveS();renderJournal();}
+function exportJournal(){const data=JSON.stringify(S.journal,null,2);const blob=new Blob([data],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="手账本备份_"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);toast("手账本已备份");}
+function importJournal(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(!d.entries||!Array.isArray(d.entries)){toast("文件格式不正确");return;}if(!confirm("导入将覆盖当前手账本数据，确定继续吗？"))return;S.journal={entries:d.entries,cover:d.cover||"",coverTitle:d.coverTitle||"我的手账本",coverSub:d.coverSub||"记录每一个瞬间",coverBg:d.coverBg||"",coverColor:d.coverColor||"#e8e6e1",stickers:d.stickers||[],pageStyle:d.pageStyle||"lined",theme:d.theme||"default"};saveS();journalIdx=0;applyJournalTheme(S.journal.theme);renderJournal();toast("手账本导入成功");}catch(err){toast("文件解析失败");}};r.readAsText(f);e.target.value="";}
+function renderMoments(){renderJournal();}
+function restoreJournalComments(){if(!S.journal||!S.journal.entries)return;const now=Date.now();S.journal.entries.forEach(e=>{if(e.commentPending&&e.time){const elapsed=now-e.time;const delay=60*60*1000;if(elapsed>=delay){addJournalComment(e.id);}else{e.commentTimer=setTimeout(()=>addJournalComment(e.id),delay-elapsed);}}});}
 function startStatusRandom(){stopStatusRandom();const scheduleNext=()=>{const delay=(60+Math.floor(Math.random()*61))*60*1000;statusTimer=setTimeout(()=>{const c=cur();if(c&&c.randomStatus&&c.statusList.length>0){c.status=c.statusList[Math.floor(Math.random()*c.statusList.length)];$("chatStatus").textContent=c.status;saveS();}scheduleNext();},delay);};scheduleNext();}
 function stopStatusRandom(){if(statusTimer){clearTimeout(statusTimer);statusTimer=null;}}
 function enterChat(id){S.cid=id;cardSearchQuery="";cardPage=1;const si=$("cardSearchInput");if(si)si.value="";renderChatHeader();renderSettings();const c=cur();if(c){c.unread=0;saveS();renderChatList();}$("chatArea").querySelectorAll(".mg,.tp").forEach(m=>m.remove());$("timeDivider").textContent=fmtTime();if(c&&c.messages){c.messages.forEach(msg=>{const m=msg.mt==="custom"?buildCustomEl(msg):buildMsgEl(msg);$("chatArea").appendChild(m);});}showTypingForCurrent();switchPg("chatPage");requestAnimationFrame(()=>{scrollBottom();});startStatusRandom();}
@@ -1289,12 +1660,33 @@ $("newContactAvatarFile").onchange=e=>handleImg(e,src=>{tmpAvatar=src;toast("头
 $("confirmAddContact").onclick=()=>{const name=$("newContactName").value.trim();if(!name){toast("请输入昵称");return;}const id="c_"+Date.now();S.cs.push({id,name,avatar:tmpAvatar,status:"在线",statusList:[...DS],randomStatus:true,cards:[...DC],isGroup:false,members:[],messages:[]});saveS();renderAll();$("addContactModal").classList.remove("on");toast("添加成功");};
 $("createGroupBtn").onclick=()=>{selMembers=[];$("newGroupName").value="";renderGroupSel();$("createGroupModal").classList.add("on");};
 $("confirmCreateGroup").onclick=()=>{if(selMembers.length<2){toast("至少选择2位联系人");return;}const name=$("newGroupName").value.trim()||"群聊";const id="g_"+Date.now();S.cs.push({id,name,avatar:"",status:`${selMembers.length}人`,statusList:[],randomStatus:false,cards:[...DC],isGroup:true,members:[...selMembers],messages:[]});saveS();renderAll();$("createGroupModal").classList.remove("on");toast("群聊已创建");};
-$("openMoments").onclick=()=>{renderMoments();$("momentsPage").classList.add("on");};
-$("backMoments").onclick=()=>$("momentsPage").classList.remove("on");
-$("editMomentsCover").onclick=()=>$("momentsCoverFile").click();
-$("momentsCoverFile").onchange=e=>handleImg(e,src=>{S.momentsCover=src;saveS();renderMoments();toast("封面已更换");});
-$("postMomentBtn").onclick=()=>{$("momentText").value="";$("momentModal").classList.add("on");};
-$("confirmMoment").onclick=()=>{const text=$("momentText").value.trim();if(!text){toast("请输入内容");return;}S.moments.unshift({text,time:fmtTime()});saveS();renderMoments();$("momentModal").classList.remove("on");toast("发布成功");};
+$("openJournal").onclick=()=>{journalIdx=0;journalShowCover=true;applyJournalTheme(S.journal.theme||"default");renderJournal();$("journalPage").classList.add("on");};
+$("backJournal").onclick=()=>$("journalPage").classList.remove("on");
+$("writeJournalBtn").onclick=()=>{journalShowCover=false;renderJournal();openJournalWrite();};
+$("confirmJournal").onclick=()=>saveJournalEntry();
+$("jwPageStyles").querySelectorAll(".jw-ps-btn").forEach(b=>b.onclick=()=>{jwPageStyle=b.dataset.ps;updateJwPageStyles();});
+$("jwFontStyles").querySelectorAll(".jw-fs-btn").forEach(b=>b.onclick=()=>{jwFontStyle=b.dataset.fs;updateJwFontStyles();});
+$("jwMoodRow").querySelectorAll(".jw-mood-btn").forEach(b=>b.onclick=()=>{jwMood=b.dataset.mood;updateJwMood();});
+$("jwThemeRow").querySelectorAll(".jw-theme-btn").forEach(b=>b.onclick=()=>{jwTheme=b.dataset.theme;updateJwThemeRow();});
+$("backupJournalBtn").onclick=()=>exportJournal();
+$("importJournalBtn").onclick=()=>$("journalBackupFile").click();
+$("journalBackupFile").onchange=importJournal;
+$("journalStickerFile").onchange=e=>handleImg(e,src=>{if(!S.journal.stickers)S.journal.stickers=[];S.journal.stickers.push(src);saveS();updateJwStickerGrid();toast("贴纸已添加");});
+$("journalPrevBtn").onclick=()=>journalPrev();
+$("journalNextBtn").onclick=()=>journalNext();
+$("journalDeleteBtn").onclick=()=>journalDelete();
+$("journalFontSelect").onchange=e=>{const entries=S.journal.entries||[];if(entries.length>0&&entries[journalIdx]){entries[journalIdx].fontStyle=e.target.value;saveS();renderJournalPage();}};
+$("journalCoverBtn").onclick=()=>openCoverEditor();
+$("journalCoverView").onclick=()=>{journalShowCover=false;renderJournal();};
+$("journalCoverPlaceholder").onclick=()=>openCoverEditor();
+$("journalCoverBackBtn").onclick=()=>{journalShowCover=true;renderJournal();};
+$("jceUploadBgBtn").onclick=()=>$("journalCoverBgFile").click();
+$("jceRemoveBgBtn").onclick=()=>{jceCoverBg="";updateCoverPreview();toast("已移除背景图");};
+$("journalCoverBgFile").onchange=e=>handleImg(e,src=>{jceCoverBg=src;updateCoverPreview();toast("背景图已选择");});
+$("jceTitleInput").oninput=()=>updateCoverPreview();
+$("jceSubInput").oninput=()=>updateCoverPreview();
+$("jceColors").querySelectorAll(".jce-color-btn").forEach(b=>b.onclick=()=>{jceCoverColor=b.dataset.color;jceCoverBg="";updateCoverPreview();updateJceColors();});
+$("jceSaveBtn").onclick=()=>saveCover();
 $("callMuteBtn").onclick=toggleMute;
 $("callSpeakerBtn").onclick=toggleSpeaker;
 $("callMinimizeBtn").onclick=minimizeCall;

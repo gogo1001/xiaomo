@@ -1353,7 +1353,9 @@ function loadS(){
         saveS();
       }
       renderAll();
-    }).catch(e=>{console.warn("部分数据加载失败",e);renderAll();});
+      /* 数据加载完成后恢复手账留言定时器 */
+      try{restoreJournalComments();}catch(e){console.warn("恢复手账留言失败",e);}
+    }).catch(e=>{console.warn("部分数据加载失败",e);renderAll();try{restoreJournalComments();}catch(e2){}});
   }).catch(e=>{console.warn("IndexedDB初始化失败",e);renderAll();});
 }
 function applyDK(){if(S.dk)document.body.classList.add("dk");else document.body.classList.remove("dk");if($("darkModeSwitch2"))$("darkModeSwitch2").checked=S.dk;}

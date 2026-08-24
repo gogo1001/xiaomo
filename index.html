@@ -110,9 +110,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue"
 .mg{display:flex;margin-bottom:12px;align-items:flex-start;gap:10px;animation:mi .25s ease-out}
 @keyframes mi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .mg.sl{flex-direction:row-reverse}
-.av{width:36px;height:36px;border-radius:4px;background:#D9D9D9;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:visible;position:relative}
-.av img{width:100%;height:100%;object-fit:cover;display:block}
-.av img.tomato-splat{width:auto;height:auto;object-fit:contain;position:absolute;left:50%;top:25%;transform:translate(-50%,-100%);z-index:99998;pointer-events:none;animation:tomatoSplat .3s ease-out}
+.av{width:36px;height:36px;border-radius:6px;background:#D9D9D9;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.av img{width:100%;height:100%;object-fit:cover;display:block;border-radius:6px}
 .bw{max-width:72%;display:flex;flex-direction:column;gap:2px}
 .bb{padding:7px 10px;font-size:14px;line-height:1.45;word-break:break-word;position:relative;color:var(--t1);background:var(--bbo);border-radius:5px;min-height:30px}
 .mg.sl .bb{background:var(--bbs);color:#191919}
@@ -463,11 +462,11 @@ body.dk .iw{background:#2C2C2C;border-color:#444}
 .journal-page-single.sticker-edit-mode .jp-sticker-item:active{box-shadow:0 0 0 3px rgba(7,193,96,.6);z-index:100}
 .sticker-edit-hint{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);color:#fff;padding:6px 16px;border-radius:20px;font-size:12px;z-index:9999;pointer-events:none;animation:fadeIn .2s ease}
 .tomato-projectile{position:fixed;pointer-events:none;z-index:99999;object-fit:contain}
-.tomato-splat{pointer-events:none;z-index:99998;object-fit:contain;animation:tomatoSplat .3s ease-out}
+.tomato-splat-abs{pointer-events:none;z-index:99998;object-fit:contain;width:16px;height:16px;animation:tomatoSplatFixed .3s ease-out}
+@keyframes tomatoSplatFixed{0%{transform:translate(-50%,-50%) scale(.3);opacity:0}30%{transform:translate(-50%,-50%) scale(1.4);opacity:1}60%{transform:translate(-50%,-50%) scale(1)}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
 .mg.tn{display:flex;justify-content:center;width:100%;align-items:center;padding:2px 0;}
 .mg.tn>div:first-child{text-align:center;font-size:11px;color:var(--t2);background:rgba(0,0,0,.05);border-radius:8px;padding:3px 12px;max-width:80%;}
 .mg.tn>.mt{font-size:10px;color:var(--t2);margin-top:2px}
-@keyframes tomatoSplat{0%{transform:translate(-50%,-100%) scale(.3);opacity:0}30%{transform:translate(-50%,-100%) scale(1.4);opacity:1}60%{transform:translate(-50%,-100%) scale(1)}100%{transform:translate(-50%,-100%) scale(1);opacity:1}}
 .jp-comments-section{margin-top:16px;border-top:1px dashed rgba(0,0,0,.1);padding-top:8px}
 .jp-comment{display:flex;gap:6px;padding:4px 0}
 .jp-comment-av{width:22px;height:22px;border-radius:4px;flex-shrink:0;overflow:hidden;background:#ddd}
@@ -1609,7 +1608,7 @@ function stopStatusRandom(){if(statusTimer){clearTimeout(statusTimer);statusTime
 function startMusicTimer(){stopMusicTimer();const scheduleNext=()=>{musicTimer=setTimeout(()=>{if(S.music&&S.music.playlist&&S.music.playlist.length>0&&Math.random()<0.01){sendRandomMusicToRandomContact();}scheduleNext();},180000);};scheduleNext();}
 function stopMusicTimer(){if(musicTimer){clearTimeout(musicTimer);musicTimer=null;}}
 function sendRandomMusicToRandomContact(){if(!S.cs||S.cs.length===0)return;const validSongs=S.music.playlist.filter(s=>!s.lost);if(validSongs.length===0)return;const song=validSongs[Math.floor(Math.random()*validSongs.length)];const c=S.cs[Math.floor(Math.random()*S.cs.length)];if(!c)return;const cid=c.id;const isGroup=c.isGroup;let av=null,nm=null;if(isGroup){const member=pickGroupMember(c);av=member?member.avatar:null;nm=member?member.name:null;}const songKey=song.songId||song.url;const musicHtml=`<div class="music-share" onclick="playSharedMusic('${songKey}','${song.name.replace(/'/g,"\\'")}')"><div class="ms-cover"><svg class="ic" viewBox="0 0 24 24" style="color:#fff;width:20px;height:20px;"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="ms-info"><div class="ms-name">${song.name}</div><div class="ms-type">🎵 点击播放</div></div></div>`;addCustomToContact(cid,musicHtml,"other",av,nm);}
-function enterChat(id){S.cid=id;cardSearchQuery="";cardPage=1;const si=$("cardSearchInput");if(si)si.value="";renderChatHeader();renderSettings();const c=cur();if(c){c.unread=0;saveS();renderChatList();}updateTabBadge();$("chatArea").querySelectorAll(".mg,.tp").forEach(m=>m.remove());$("timeDivider").textContent=fmtTime();if(c&&c.messages){c.messages.forEach(msg=>{const m=(msg.mt==="custom"||msg.mt==="tomatoNote")?buildCustomEl(msg):buildMsgEl(msg);$("chatArea").appendChild(m);});}showTypingForCurrent();switchPg("chatPage");requestAnimationFrame(()=>{scrollBottom();});startStatusRandom();}
+function enterChat(id){S.cid=id;cardSearchQuery="";cardPage=1;const si=$("cardSearchInput");if(si)si.value="";renderChatHeader();renderSettings();const c=cur();if(c){c.unread=0;saveS();renderChatList();}updateTabBadge();$("chatArea").querySelectorAll(".mg,.tp").forEach(m=>m.remove());/* 清除残留的番茄酱 */document.querySelectorAll(".tomato-splat-abs,.tomato-projectile").forEach(e=>e.remove());$("timeDivider").textContent=fmtTime();if(c&&c.messages){c.messages.forEach(msg=>{try{const m=(msg.mt==="custom"||msg.mt==="tomatoNote")?buildCustomEl(msg):buildMsgEl(msg);if(m)$("chatArea").appendChild(m);}catch(e){console.warn("消息渲染失败:",e);}});}showTypingForCurrent();switchPg("chatPage");requestAnimationFrame(()=>{scrollBottom();});startStatusRandom();}
 function bindEvents(){
 function safe(id,fn){const el=$(id);if(el)fn(el);else console.warn("元素不存在:",id);}
 document.querySelectorAll(".ti").forEach(t=>t.onclick=()=>switchPg(t.dataset.pg));
@@ -2010,6 +2009,9 @@ return null;
 /* 核心投掷函数：startAvEl起点头像，targetAvEl目标头像，onComplete回调 */
 function throwTomatoAt(startAvEl,targetAvEl,onComplete){
 if(!startAvEl||!targetAvEl){if(onComplete)onComplete();return;}
+/* 限制同屏番茄飞行+溅落数量，防止DOM堆积导致卡顿 */
+const existing=document.querySelectorAll(".tomato-projectile,.tomato-splat-abs");
+if(existing.length>30){existing.forEach((e,i)=>{if(i<10)e.remove();});}
 /* 开始扔就播放音效 */
 playTomatoSfx();
 const startRect=startAvEl.getBoundingClientRect();
@@ -2044,12 +2046,22 @@ projectile.style.top=curY+"px";
 projectile.style.transform=`translate(-50%,-50%) rotate(${t*720}deg)`;
 if(t<1){requestAnimationFrame(animate);}
 else{
-/* 到达目标，番茄酱贴在头像上（absolute定位，随页面滚动） */
+/* 到达目标，番茄酱贴在头像上（absolute定位在.mg容器内，随页面滚动） */
 projectile.remove();
 const splat=document.createElement("img");
 splat.src=SPLAT_IMG;
-splat.className="tomato-splat";
-targetAvEl.appendChild(splat);
+splat.className="tomato-splat-abs";
+/* 找到头像的父容器（.mg或头像包裹div） */
+const avParent=targetAvEl.parentElement;
+if(avParent){
+avParent.style.position=avParent.style.position||"relative";
+splat.style.position="absolute";
+/* 相对于头像父容器定位：头像左上角 + 头像宽度/2，头像顶部 + 头像高度的1/4 */
+splat.style.left=targetAvEl.offsetLeft+targetAvEl.offsetWidth/2+"px";
+splat.style.top=(targetAvEl.offsetTop+targetAvEl.offsetHeight*0.25-8)+"px";
+splat.style.transform="translate(-50%,-50%)";
+avParent.appendChild(splat);
+}
 /* 60秒后淡出消失 */
 setTimeout(()=>{splat.style.transition="opacity .5s";splat.style.opacity="0";setTimeout(()=>splat.remove(),500);},60000);
 if(onComplete)setTimeout(onComplete,300);
@@ -2062,9 +2074,22 @@ function throwTomato(targetAv){
 const startAv=findLatestAvatarByType("self");
 if(!startAv){toast("需要先发送一条消息");return;}
 const c=cur();
-if(c){const myName=S.me.name||"我";const targetName=c.name||"对方";addTomatoNote(c.id,myName,targetName,"self");
+if(!c)return;
+const myName=S.me.name||"我";
+/* 群聊时从被双击的头像所属消息中获取成员名 */
+let targetName=c.name||"对方";
+let targetMemberId=null;
+if(c.isGroup){
+/* 从targetAv所在消息元素中获取nameOverride */
+const mgEl=targetAv.closest('.mg');
+if(mgEl){
+const nameEl=mgEl.querySelector('[style*="font-size:10px"]');
+if(nameEl){targetName=nameEl.textContent;}
+}
+}
+if(c){addTomatoNote(c.id,myName,targetName,"self");
 S.tomatoLog=S.tomatoLog||[];S.tomatoLog.push({thrower:myName,target:targetName,time:fmtTime(),date:Date.now()});if(S.tomatoLog.length>50)S.tomatoLog.shift();saveS();}
-throwTomatoAt(startAv,targetAv,()=>handleTomatoReaction(targetAv,"self",c.name||"对方"));
+throwTomatoAt(startAv,targetAv,()=>handleTomatoReaction(targetAv,"self",targetName));
 }
 /* 添加番茄提示消息（连续相同番茄合并为一条，显示次数） */
 function addTomatoNote(cid,throwerName,targetName,type){
@@ -2086,8 +2111,10 @@ saveS();
 if(S.cid===cid&&$("chatPage").classList.contains("on")){
 /* 更新或添加番茄提示DOM */
 const ca=$("chatArea");
-const existing=ca.lastElementChild;
-if(existing&&existing.classList.contains("tn")&&existing.dataset.tomatoKey===key){
+/* 查找最后一条番茄提示（不一定是最后一个子元素，中间可能有打字指示器） */
+const tnEls=ca.querySelectorAll('.mg.tn');
+const existing=tnEls.length>0?tnEls[tnEls.length-1]:null;
+if(existing&&existing.dataset.tomatoKey===key){
 const msg=msgs[msgs.length-1];
 existing.querySelector("div:first-child").innerHTML=msg.html;
 existing.querySelector(".mt").textContent=fmtTime();
@@ -2100,13 +2127,12 @@ scrollBottom();
 }
 renderChatList();updateTabBadge();
 }
-/* 被砸后的反应处理：throwerType=谁扔的(self/other) */
+/* 被砸后的反应处理：throwerType=谁扔的(self/other)，throwerName=扔的人名 */
 function handleTomatoReaction(targetAvEl,throwerType,throwerName){
 if(!targetAvEl)return;
 const c=cur();if(!c)return;
 const cid=c.id;
 const myName=S.me.name||"我";
-const otherName=c.name||"对方";
 const r=Math.random();
 if(r<0.60){
 /* 60%不回复 */
@@ -2120,14 +2146,15 @@ const returnTarget=findLatestAvatarByType(throwerType);
 if(returnStart&&returnTarget){
 /* 添加扔回番茄的通知 */
 if(throwerType==="self"){
-/* 用户扔的，对方扔回 */
-addTomatoNote(cid,otherName,myName,"other");
+/* 用户扔的，被砸方扔回 */
+const returnerName=throwerName||c.name||"对方";
+addTomatoNote(cid,returnerName,myName,"other");
 S.tomatoLog=S.tomatoLog||[];
-S.tomatoLog.push({thrower:otherName,target:myName,time:fmtTime(),date:Date.now()});
+S.tomatoLog.push({thrower:returnerName,target:myName,time:fmtTime(),date:Date.now()});
 if(S.tomatoLog.length>50)S.tomatoLog.shift();saveS();
 }else{
 /* 对方扔的，用户扔回 */
-addTomatoNote(cid,myName,otherName,"self");
+addTomatoNote(cid,myName,throwerName||c.name||"对方","self");
 }
 throwTomatoAt(returnStart,returnTarget,null);
 }
@@ -2164,7 +2191,7 @@ S.tomatoLog=S.tomatoLog||[];
 S.tomatoLog.push({thrower:throwerName,target:targetName,time:fmtTime(),date:Date.now()});
 if(S.tomatoLog.length>50)S.tomatoLog.shift();
 saveS();
-throwTomatoAt(startAv,targetAv,()=>handleTomatoReaction(targetAv,"other"));
+throwTomatoAt(startAv,targetAv,()=>handleTomatoReaction(targetAv,"other",throwerName));
 }
 /* 群聊中随机联系人扔番茄给随机目标 */
 function groupMemberThrowTomato(cid){
@@ -2195,8 +2222,8 @@ const startAv=findLatestAvatarByType("other");
 const targetAv=findLatestAvatarByType(target.type);
 if(!startAv||!targetAv)return;
 throwTomatoAt(startAv,targetAv,()=>{
-if(target.type==="self"){handleTomatoReaction(targetAv,"other");}
-else{handleTomatoReaction(targetAv,"other");}
+if(target.type==="self"){handleTomatoReaction(targetAv,"other",throwerMember.name);}
+else{handleTomatoReaction(targetAv,"other",throwerMember.name);}
 });
 }
 /* 双击对方头像扔番茄 */

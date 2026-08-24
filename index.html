@@ -465,8 +465,9 @@ body.dk .iw{background:#2C2C2C;border-color:#444}
 .tomato-projectile{position:fixed;pointer-events:none;z-index:99999;object-fit:contain}
 .tomato-splat{pointer-events:none;z-index:99998;object-fit:contain;animation:tomatoSplat .3s ease-out}
 .mg.tn{display:flex;justify-content:center;width:100%;align-items:center;padding:2px 0;}
-.mg.tn>div{text-align:center;font-size:11px;color:var(--t2);background:rgba(0,0,0,.05);border-radius:8px;padding:3px 12px;max-width:80%;}
-@keyframes tomatoSplat{0%{transform:scale(.3);opacity:0}30%{transform:scale(1.4);opacity:1}60%{transform:scale(1)}100%{transform:scale(1);opacity:1}}
+.mg.tn>div:first-child{text-align:center;font-size:11px;color:var(--t2);background:rgba(0,0,0,.05);border-radius:8px;padding:3px 12px;max-width:80%;}
+.mg.tn>.mt{font-size:10px;color:var(--t2);margin-top:2px}
+@keyframes tomatoSplat{0%{transform:translate(-50%,-100%) scale(.3);opacity:0}30%{transform:translate(-50%,-100%) scale(1.4);opacity:1}60%{transform:translate(-50%,-100%) scale(1)}100%{transform:translate(-50%,-100%) scale(1);opacity:1}}
 .jp-comments-section{margin-top:16px;border-top:1px dashed rgba(0,0,0,.1);padding-top:8px}
 .jp-comment{display:flex;gap:6px;padding:4px 0}
 .jp-comment-av{width:22px;height:22px;border-radius:4px;flex-shrink:0;overflow:hidden;background:#ddd}
@@ -1873,7 +1874,7 @@ function buildMsgEl(msg){const m=document.createElement("div");m.className="mg "
 const quoteHtml=msg.quote?`<div class="msg-quote">${msg.quote}</div>`:"";
 const nameHtml=msg.nameOverride?`<div style="font-size:11px;color:var(--t2);margin-bottom:2px;padding-left:2px;">${msg.nameOverride}</div>`:"";
 if(msg.nameOverride){m.innerHTML=`<div style="display:flex;flex-direction:column;flex-shrink:0;align-items:center;width:36px;"><div class="av" data-type="${msg.type}">${av}</div><div style="font-size:10px;color:var(--t2);margin-top:2px;text-align:center;max-width:36px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${msg.nameOverride}</div></div><div class="bw">${quoteHtml}<div class="${cls}">${bc}</div>${msg.note?`<div class="vnote">${msg.note}</div>`:""}<div class="mt">${msg.time}</div></div>`;}else{m.innerHTML=`<div class="av" data-type="${msg.type}">${av}</div><div class="bw">${quoteHtml}<div class="${cls}">${bc}</div>${msg.note?`<div class="vnote">${msg.note}</div>`:""}<div class="mt">${msg.time}</div></div>`;}if(msg.mt==="voice"){const vb=m.querySelector(".bb");if(vb){vb.onclick=function(){const p=this.querySelector(".vbp");if(!p)return;p.style.transition="none";p.style.width="0";void p.offsetWidth;p.style.transition=`width ${msg.content}s linear`;p.style.width="100%";};}}attachLongPress(m,msg);return m;}
-function buildCustomEl(msg){if(msg.mt==="tomatoNote"){const m=document.createElement("div");m.className="mg tn";m.innerHTML=`<div>${msg.html}</div>`;return m;}const m=document.createElement("div");m.className="mg "+(msg.type==="self"?"sl":"");const c=cur();let av;if(msg.type==="self")av=S.me.avatar?`<img src="${S.me.avatar}">`:`<svg class="ic" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;else if(msg.avatarOverride)av=`<img src="${msg.avatarOverride}">`;else av=c?.avatar?`<img src="${c.avatar}">`:"👤";const nameHtml=msg.nameOverride?`<div style="font-size:11px;color:var(--t2);margin-bottom:2px;padding-left:2px;">${msg.nameOverride}</div>`:"";if(msg.nameOverride){m.innerHTML=`<div style="display:flex;flex-direction:column;flex-shrink:0;align-items:center;width:36px;"><div class="av" data-type="${msg.type}">${av}</div><div style="font-size:10px;color:var(--t2);margin-top:2px;text-align:center;max-width:36px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${msg.nameOverride}</div></div><div class="bw">${nameHtml}${msg.html}<div class="mt">${msg.time}</div></div>`;}else{m.innerHTML=`<div class="av" data-type="${msg.type}">${av}</div><div class="bw">${msg.html}<div class="mt">${msg.time}</div></div>`;}return m;}
+function buildCustomEl(msg){if(msg.mt==="tomatoNote"){const m=document.createElement("div");m.className="mg tn";m.dataset.tomatoKey=msg.tomatoKey||"";m.innerHTML=`<div>${msg.html}</div><div class="mt">${msg.time}</div>`;return m;}const m=document.createElement("div");m.className="mg "+(msg.type==="self"?"sl":"");const c=cur();let av;if(msg.type==="self")av=S.me.avatar?`<img src="${S.me.avatar}">`:`<svg class="ic" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;else if(msg.avatarOverride)av=`<img src="${msg.avatarOverride}">`;else av=c?.avatar?`<img src="${c.avatar}">`:"👤";const nameHtml=msg.nameOverride?`<div style="font-size:11px;color:var(--t2);margin-bottom:2px;padding-left:2px;">${msg.nameOverride}</div>`:"";if(msg.nameOverride){m.innerHTML=`<div style="display:flex;flex-direction:column;flex-shrink:0;align-items:center;width:36px;"><div class="av" data-type="${msg.type}">${av}</div><div style="font-size:10px;color:var(--t2);margin-top:2px;text-align:center;max-width:36px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${msg.nameOverride}</div></div><div class="bw">${nameHtml}${msg.html}<div class="mt">${msg.time}</div></div>`;}else{m.innerHTML=`<div class="av" data-type="${msg.type}">${av}</div><div class="bw">${msg.html}<div class="mt">${msg.time}</div></div>`;}return m;}
 function getMsgPreview(msg){if(msg.mt==="custom"){if(msg.html.includes("rpc")||msg.html.includes("红包"))return"[红包]";if(msg.html.includes("tfc")||msg.html.includes("转账"))return"[转账]";if(msg.html.includes("letter-share"))return"[信件]";if(msg.html.includes("loc"))return"[位置]";if(msg.html.includes("music-share"))return"[音乐]";return"[消息]";}if(msg.mt==="tomatoNote")return"🍅";switch(msg.mt){case"text":return msg.content.length>20?msg.content.slice(0,20)+"…":msg.content;case"emojiText":return msg.content;case"emoji":return"[表情]";case"image":return"[图片]";case"voice":return`[语音] ${msg.content}"`;default:return"";}}
 function addMsg(content,type,mt,note,avatarOverride,nameOverride,quote){const c=cur();if(!c)return;const time=fmtTime();const msg={content,type,mt,note:note||null,avatarOverride:avatarOverride||null,nameOverride:nameOverride||null,quote:quote||null,time};c.messages.push(msg);if(type==="other"&&!($("chatPage").classList.contains("on")&&S.cid===c.id)){c.unread=(c.unread||0)+1;}saveS();if($("chatPage").classList.contains("on")&&S.cid===c.id){const m=buildMsgEl(msg);$("chatArea").appendChild(m);scrollBottom();}renderChatList();updateTabBadge();}
 function addCustom(html,type){const c=cur();if(!c)return;const time=fmtTime();const msg={html,type,time,mt:"custom"};c.messages.push(msg);if(type==="other"&&!($("chatPage").classList.contains("on")&&S.cid===c.id)){c.unread=(c.unread||0)+1;}saveS();if($("chatPage").classList.contains("on")&&S.cid===c.id){const m=buildCustomEl(msg);$("chatArea").appendChild(m);scrollBottom();}renderChatList();updateTabBadge();}
@@ -1991,13 +1992,20 @@ const logs=S.tomatoLog||[];
 if(logs.length===0){body.innerHTML=`<div style="padding:10px 18px;font-size:12px;color:var(--t2);">暂无番茄记录</div>`;return;}
 body.innerHTML=logs.slice().reverse().map(l=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 18px;border-bottom:1px solid var(--bd);font-size:12px;"><span style="font-size:16px;">🍅</span><span style="flex:1;"><b style="color:var(--t1);">${l.thrower}</b> 向 <b style="color:var(--t1);">${l.target}</b> 扔了番茄</span><span style="color:var(--t2);flex-shrink:0;">${l.time}</span></div>`).join("");
 }
-/* 从指定类型消息中找到最新一条的头像元素 */
+/* 从指定类型消息中找到最新一条的头像元素（跳过番茄提示等无头像消息） */
 function findLatestAvatarByType(type){
 const ca=$("chatArea");
-const msgs=ca.querySelectorAll('.mg'+(type==="self"?".sl":":not(.sl)"));
-if(!msgs||msgs.length===0)return null;
-const last=msgs[msgs.length-1];
-return last.querySelector('.av');
+const all=ca.querySelectorAll('.mg');
+for(let i=all.length-1;i>=0;i--){
+const el=all[i];
+if(el.classList.contains("tn"))continue;
+const isSelf=el.classList.contains("sl");
+if((type==="self"&&isSelf)||(type==="other"&&!isSelf)){
+const av=el.querySelector('.av');
+if(av)return av;
+}
+}
+return null;
 }
 /* 核心投掷函数：startAvEl起点头像，targetAvEl目标头像，onComplete回调 */
 function throwTomatoAt(startAvEl,targetAvEl,onComplete){
@@ -2006,19 +2014,19 @@ if(!startAvEl||!targetAvEl){if(onComplete)onComplete();return;}
 playTomatoSfx();
 const startRect=startAvEl.getBoundingClientRect();
 const targetRect=targetAvEl.getBoundingClientRect();
-/* 起点：头像顶部中心 */
+/* 起点：我的头像中心 */
 const startX=startRect.left+startRect.width/2;
-const startY=startRect.top;
-/* 终点：对方头像顶部1/4处中心 */
+const startY=startRect.top+startRect.height/2;
+/* 终点：对方头像，图片底部在头像顶部1/4处 */
 const endX=targetRect.left+targetRect.width/2;
-const endY=targetRect.top+targetRect.height/4;
+const endY=targetRect.top+targetRect.height*0.25;
 /* 创建番茄飞行元素（使用图片自然尺寸） */
 const projectile=document.createElement("img");
 projectile.src=TOMATO_IMG;
 projectile.className="tomato-projectile";
 projectile.style.left=startX+"px";
 projectile.style.top=startY+"px";
-projectile.style.transform="translate(-50%,-100%)";
+projectile.style.transform="translate(-50%,-50%)";
 document.body.appendChild(projectile);
 /* 抛物线动画 */
 const duration=600;
@@ -2033,7 +2041,7 @@ const curX=startX+dx*t;
 const curY=startY+dy*t-arcHeight*Math.sin(Math.PI*t);
 projectile.style.left=curX+"px";
 projectile.style.top=curY+"px";
-projectile.style.transform=`translate(-50%,-100%) rotate(${t*720}deg)`;
+projectile.style.transform=`translate(-50%,-50%) rotate(${t*720}deg)`;
 if(t<1){requestAnimationFrame(animate);}
 else{
 /* 到达目标，番茄酱贴在头像上（absolute定位，随页面滚动） */
@@ -2054,12 +2062,51 @@ function throwTomato(targetAv){
 const startAv=findLatestAvatarByType("self");
 if(!startAv){toast("需要先发送一条消息");return;}
 const c=cur();
-if(c){const myName=S.me.name||"我";const targetName=c.name||"对方";const tomatoNoteHtml=`🍅 ${myName} 向 ${targetName} 扔了一个番茄`;addCustomToContact(c.id,tomatoNoteHtml,"self",null,null,"tomatoNote");}
-throwTomatoAt(startAv,targetAv,()=>handleTomatoReaction(targetAv,"self"));
+if(c){const myName=S.me.name||"我";const targetName=c.name||"对方";addTomatoNote(c.id,myName,targetName,"self");
+S.tomatoLog=S.tomatoLog||[];S.tomatoLog.push({thrower:myName,target:targetName,time:fmtTime(),date:Date.now()});if(S.tomatoLog.length>50)S.tomatoLog.shift();saveS();}
+throwTomatoAt(startAv,targetAv,()=>handleTomatoReaction(targetAv,"self",c.name||"对方"));
+}
+/* 添加番茄提示消息（连续相同番茄合并为一条，显示次数） */
+function addTomatoNote(cid,throwerName,targetName,type){
+const c=S.cs.find(x=>x.id===cid);
+if(!c)return;
+const key=throwerName+"→"+targetName;
+const msgs=c.messages;
+/* 检查最后一条消息是否是相同方向的番茄提示 */
+if(msgs.length>0&&msgs[msgs.length-1].mt==="tomatoNote"&&msgs[msgs.length-1].tomatoKey===key){
+msgs[msgs.length-1].count=(msgs[msgs.length-1].count||1)+1;
+msgs[msgs.length-1].time=fmtTime();
+msgs[msgs.length-1].html=`🍅 ${throwerName} 向 ${targetName} 扔了 ${msgs[msgs.length-1].count} 个番茄`;
+}else{
+const tomatoNoteHtml=`🍅 ${throwerName} 向 ${targetName} 扔了一个番茄`;
+msgs.push({html:tomatoNoteHtml,type:type,time:fmtTime(),mt:"tomatoNote",tomatoKey:key,count:1});
+}
+if(type==="other"&&!($("chatPage").classList.contains("on")&&S.cid===cid)){c.unread=(c.unread||0)+1;}
+saveS();
+if(S.cid===cid&&$("chatPage").classList.contains("on")){
+/* 更新或添加番茄提示DOM */
+const ca=$("chatArea");
+const existing=ca.lastElementChild;
+if(existing&&existing.classList.contains("tn")&&existing.dataset.tomatoKey===key){
+const msg=msgs[msgs.length-1];
+existing.querySelector("div:first-child").innerHTML=msg.html;
+existing.querySelector(".mt").textContent=fmtTime();
+}else{
+const m=buildCustomEl(msgs[msgs.length-1]);
+m.dataset.tomatoKey=key;
+ca.appendChild(m);
+}
+scrollBottom();
+}
+renderChatList();updateTabBadge();
 }
 /* 被砸后的反应处理：throwerType=谁扔的(self/other) */
 function handleTomatoReaction(targetAvEl,throwerType,throwerName){
 if(!targetAvEl)return;
+const c=cur();if(!c)return;
+const cid=c.id;
+const myName=S.me.name||"我";
+const otherName=c.name||"对方";
 const r=Math.random();
 if(r<0.60){
 /* 60%不回复 */
@@ -2071,21 +2118,32 @@ const targetType=throwerType==="self"?"other":"self";
 const returnStart=findLatestAvatarByType(targetType);
 const returnTarget=findLatestAvatarByType(throwerType);
 if(returnStart&&returnTarget){
+/* 添加扔回番茄的通知 */
+if(throwerType==="self"){
+/* 用户扔的，对方扔回 */
+addTomatoNote(cid,otherName,myName,"other");
+S.tomatoLog=S.tomatoLog||[];
+S.tomatoLog.push({thrower:otherName,target:myName,time:fmtTime(),date:Date.now()});
+if(S.tomatoLog.length>50)S.tomatoLog.shift();saveS();
+}else{
+/* 对方扔的，用户扔回 */
+addTomatoNote(cid,myName,otherName,"self");
+}
 throwTomatoAt(returnStart,returnTarget,null);
 }
 },800);
 }else{
 /* 15%回复一条消息 */
-const c=cur();
-if(c){
+const c2=cur();
+if(c2){
 setTimeout(()=>{
-const cid=S.cid;
-const isGroup=c.isGroup;
+const cid2=S.cid;
+const isGroup=c2.isGroup;
 let av=null,nm=null;
-if(isGroup){const member=pickGroupMember(c);av=member?member.avatar:null;nm=member?member.name:null;}
-if(c.cards&&c.cards.length>0){
-const card=c.cards[Math.floor(Math.random()*c.cards.length)];
-if(isGroup){addMsgToContact(cid,card,"other","text",null,av,nm);}else{addMsgToContact(cid,card,"other","text");}
+if(isGroup){const member=pickGroupMember(c2);av=member?member.avatar:null;nm=member?member.name:null;}
+if(c2.cards&&c2.cards.length>0){
+const card=c2.cards[Math.floor(Math.random()*c2.cards.length)];
+if(isGroup){addMsgToContact(cid2,card,"other","text",null,av,nm);}else{addMsgToContact(cid2,card,"other","text");}
 }
 },1200);
 }
@@ -2101,8 +2159,7 @@ const startAv=findLatestAvatarByType("other");
 const targetAv=findLatestAvatarByType("self");
 if(!startAv||!targetAv)return;
 const throwerName=c.name||"对方";const targetName=S.me.name||"我";
-const tomatoNoteHtml=`🍅 ${throwerName} 向 ${targetName} 扔了一个番茄`;
-addCustomToContact(cid,tomatoNoteHtml,"other",null,null,"tomatoNote");
+addTomatoNote(cid,throwerName,targetName,"other");
 S.tomatoLog=S.tomatoLog||[];
 S.tomatoLog.push({thrower:throwerName,target:targetName,time:fmtTime(),date:Date.now()});
 if(S.tomatoLog.length>50)S.tomatoLog.shift();
@@ -2132,8 +2189,7 @@ S.tomatoLog.push({thrower:throwerMember.name,target:target.name,time:fmtTime(),d
 if(S.tomatoLog.length>50)S.tomatoLog.shift();
 saveS();
 /* 在聊天里添加通知 */
-const tomatoNoteHtml=`🍅 ${throwerMember.name} 向 ${target.name} 扔了一个番茄`;
-addCustomToContact(cid,tomatoNoteHtml,"other",null,null,"tomatoNote");
+addTomatoNote(cid,throwerMember.name,target.name,"other");
 /* 视觉：从扔的人最新头像飞向目标最新头像 */
 const startAv=findLatestAvatarByType("other");
 const targetAv=findLatestAvatarByType(target.type);
